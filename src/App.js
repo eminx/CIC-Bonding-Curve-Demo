@@ -272,7 +272,7 @@ const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
             size="large"
             value={value}
             disabled={playMode}
-            onChange={({ target: { value } }) => onChange(value)}
+            onChange={({ target: { value } }) => onChange(Number(value))}
             {...otherProps}
           />
         </Box>
@@ -280,7 +280,7 @@ const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
           <Box width="100%">
             <RangeInput
               value={value}
-              onChange={({ target: { value } }) => onChange(value)}
+              onChange={({ target: { value } }) => onChange(Number(value))}
               {...otherProps}
             />
           </Box>
