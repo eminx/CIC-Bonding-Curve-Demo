@@ -8,14 +8,16 @@ import {
   FormField,
   RangeInput,
   Text,
+  base,
 } from 'grommet';
+import { deepMerge } from 'grommet/utils';
 import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  LineChart,
-  Line,
+  // LineChart,
+  // Line,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -24,7 +26,7 @@ import {
 } from 'recharts';
 import { Atm, Money } from 'grommet-icons';
 
-const theme = {
+const theme = deepMerge(base, {
   global: {
     colors: {
       brand: '#db2e9c',
@@ -43,7 +45,7 @@ const theme = {
       border: false,
     },
   },
-};
+});
 
 const AppBar = (props) => (
   <Box
@@ -131,12 +133,15 @@ function App() {
       <Box background="light-1" height="100%">
         <AppBar>
           <Heading level={2} textAlign="center">
-            Interactive ABC Demo
+            <b>Interactive ABC Demo</b>
           </Heading>
           <Text>ABC = Augmented Bonding Curve</Text>
         </AppBar>
         <Box width="100%" pad="medium" direction="row" justify="center">
-          <Box width={playMode ? 'medium' : 'large'}>
+          <Box
+            width={playMode ? 'medium' : 'large'}
+            animation={playMode ? 'slideLeft' : 'fadeIn'}
+          >
             <InitialsUI {...initialsUIProps} />
             <Button
               primary={!playMode}
@@ -146,7 +151,7 @@ function App() {
           </Box>
 
           {playMode && (
-            <Box width="70%" pad="medium">
+            <Box width="70%" pad="medium" animation="zoomIn">
               <Box
                 direction="row"
                 width="large"
@@ -189,7 +194,7 @@ function App() {
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
-                <LineChart
+                <AreaChart
                   width="100%"
                   height={400}
                   data={priceSet}
@@ -207,14 +212,14 @@ function App() {
                     <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="price"
                     stroke="#db2e9c"
                     strokeWidth={2}
-                    // fill="#f7b7dc"
+                    fill="#f7b7dc"
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             </Box>
           )}
