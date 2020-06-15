@@ -81,7 +81,7 @@ function App() {
   const [amount, setAmount] = useState(50);
   const [priceSet, setPriceSet] = useState([
     {
-      step: 1,
+      step: 0,
       price: getPrice(
         defaultInitials.reserve,
         defaultInitials.supply,
@@ -102,7 +102,7 @@ function App() {
       ...priceSet,
       {
         price: getPrice(newReserve, newSupply, initials.trr),
-        step: priceSet.length + 1,
+        step: priceSet.length,
       },
     ]);
   };
@@ -115,7 +115,7 @@ function App() {
       ...priceSet,
       {
         price: getPrice(newReserve, newSupply, initials.trr),
-        step: priceSet.length + 1,
+        step: priceSet.length,
       },
     ]);
   };
