@@ -97,7 +97,6 @@ function App() {
   const cashIn = (amount) => {
     const newReserve = initials.reserve - amount;
     const newSupply = initials.supply + amount;
-    console.log(newReserve, newSupply);
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
