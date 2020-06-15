@@ -13,12 +13,14 @@ import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   AreaChart,
+  Area,
+  LineChart,
+  Line,
   CartesianGrid,
   XAxis,
   YAxis,
   Label,
   Tooltip,
-  Area,
 } from 'recharts';
 import { Atm, Money } from 'grommet-icons';
 
@@ -231,29 +233,32 @@ function App() {
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
-                <AreaChart
+                <LineChart
+                  width="100%"
+                  height={400}
                   data={priceSet}
                   margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="1 3" />
                   <XAxis dataKey="step">
                     <Label
-                      value="CONVERSIONS"
-                      offset={-20}
-                      position="insideBottom"
+                      value="conversions"
+                      offset={0}
+                      position="insideBottomRight"
                     />
                   </XAxis>
                   <YAxis>
-                    <Label value="CIC PRICE VALUE" offset={0} position="left" />
+                    <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
-                  <Area
+                  <Line
                     type="monotone"
                     dataKey="price"
-                    stroke="#8884d8"
-                    fill="#8884d8"
+                    stroke="#db2e9c"
+                    strokeWidth={2}
+                    // fill="#f7b7dc"
                   />
-                </AreaChart>
+                </LineChart>
               </ResponsiveContainer>
             </Box>
           )}
