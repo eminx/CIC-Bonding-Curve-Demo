@@ -99,8 +99,8 @@ const AppBar = (props) => (
 );
 
 const defaultInitials = {
-  reserve: 100000,
-  supply: 400000,
+  reserve: 1000,
+  supply: 4000,
   trr: 0.25,
 };
 
@@ -142,7 +142,7 @@ function App() {
     setPriceSet([
       ...priceSet,
       {
-        price: getPrice(newSupply, newReserve, initials.trr),
+        price: getPrice(newReserve, newSupply, initials.trr),
         step: priceSet.length + 2,
       },
     ]);
@@ -155,8 +155,8 @@ function App() {
     setPriceSet([
       ...priceSet,
       {
-        price: getPrice(newSupply, newReserve, initials.trr),
-        step: priceSet.length + 2,
+        price: getPrice(newReserve, newSupply, initials.trr),
+        step: priceSet.length + 1,
       },
     ]);
   };
@@ -169,7 +169,7 @@ function App() {
 
   return (
     <Grommet theme={theme}>
-      <Box background="light-1">
+      <Box background="light-1" height="100%">
         <AppBar>
           <Heading level={2} textAlign="center">
             Interactive ABC Demo
