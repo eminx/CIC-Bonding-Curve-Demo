@@ -13,12 +13,14 @@ import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   AreaChart,
+  CartesianGrid,
   XAxis,
   YAxis,
   Label,
   Tooltip,
   Area,
 } from 'recharts';
+import { Atm, Money } from 'grommet-icons';
 
 const data = [
   {
@@ -91,7 +93,7 @@ const AppBar = (props) => (
     tag="header"
     align="center"
     justify="between"
-    background="dark-2"
+    background="light-2"
     pad={{ left: 'medium', right: 'small', vertical: 'small' }}
     style={{ zIndex: '1', textAlign: 'center' }}
     {...props}
@@ -136,22 +138,23 @@ function App() {
   };
 
   const cashIn = (amount) => {
-    const newSupply = initials.supply + amount;
     const newReserve = initials.reserve - amount;
-    setInitials({ supply: newSupply, reserve: newReserve, trr: initials.trr });
+    const newSupply = initials.supply + amount;
+    console.log(newReserve, newSupply);
+    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
       {
         price: getPrice(newReserve, newSupply, initials.trr),
-        step: priceSet.length + 2,
+        step: priceSet.length + 1,
       },
     ]);
   };
 
   const cashOut = (amount) => {
-    const newSupply = initials.supply - amount;
     const newReserve = initials.reserve + amount;
-    setInitials({ supply: newSupply, reserve: newReserve, trr: initials.trr });
+    const newSupply = initials.supply - amount;
+    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
       {
@@ -188,23 +191,51 @@ function App() {
 
           {playMode && (
             <Box width="70%" pad="medium">
-              <Box direction="row" width="medium" height="50px" gap="xsmall">
+              <Box
+                direction="row"
+                width="large"
+                height="60px"
+                gap="small"
+                justify="center"
+                align="center"
+              >
+                <Box width="small" align="center" pad="xsmall">
+                  <NumberInput
+                    size="xlarge"
+                    value={amount}
+                    step={5}
+                    min={1}
+                    max={100}
+                    onChange={({ target: { value } }) => setAmount(value)}
+                  />
+                </Box>
                 <Box
-                  width="xxsmall"
-                  background="dark-1"
-                  onClick={() => cashIn(50)}
-                />
+                  width="xsmall"
+                  onClick={() => cashIn(amount)}
+                  align="center"
+                  hoverIndicator="light-2"
+                  pad="xsmall"
+                >
+                  <Atm />
+                  <Text size="small">CASH IN</Text>
+                </Box>
                 <Box
-                  width="xxsmall"
-                  background="dark-1"
-                  onClick={() => cashOut(50)}
-                />
+                  width="xsmall"
+                  onClick={() => cashOut(amount)}
+                  align="center"
+                  hoverIndicator="light-2"
+                  pad="xsmall"
+                >
+                  <Money />
+                  <Text size="small">CASH OUT</Text>
+                </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
                 <AreaChart
                   data={priceSet}
                   margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                 >
+                  <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="step">
                     <Label
                       value="CONVERSIONS"
@@ -240,7 +271,7 @@ const InitialsUI = ({ initials, setInitial, playMode }) => (
       value={initials.reserve}
       onChange={(value) => setInitial({ reserve: value })}
       step={10}
-      min={1000}
+      min={0}
       max={1000000}
       thousandsSeparatorSymbol=" "
       playMode={playMode}
@@ -252,7 +283,7 @@ const InitialsUI = ({ initials, setInitial, playMode }) => (
       value={initials.supply}
       onChange={(value) => setInitial({ supply: value })}
       step={10}
-      min={1000}
+      min={0}
       max={1000000}
       thousandsSeparatorSymbol=" "
       playMode={playMode}
