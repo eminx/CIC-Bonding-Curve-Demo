@@ -188,7 +188,7 @@ function App() {
                   <Tooltip />
                   <Bar fill="#bbde8a" dataKey="price" barSize={20} />
                   <Line
-                    // type="monotone"
+                    type="natural"
                     dataKey="price"
                     stroke="#db2e9c"
                     strokeWidth={2}
