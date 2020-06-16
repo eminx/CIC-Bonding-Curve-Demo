@@ -3,10 +3,9 @@ import { Button, Box, Heading, Image, Grommet, Text } from 'grommet';
 import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
-  // LineChart,
-  // Line,
+  ComposedChart,
+  Bar,
+  Line,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -114,7 +113,7 @@ function App() {
             <InitialsUI {...initialsUIProps} />
             <Button
               primary={!playMode}
-              label={playMode ? 'Reset Initials' : 'Start Playing'}
+              label={playMode ? 'Reset' : 'Start'}
               onClick={() => changePlayMode()}
             />
           </Box>
@@ -137,7 +136,7 @@ function App() {
                       decimals={0}
                       step={5}
                       min={1}
-                      max={100}
+                      max={1000}
                       onChange={({ target: { value } }) =>
                         setAmount(Number(value))
                       }
@@ -161,7 +160,7 @@ function App() {
                   </Box>
                 </Box>
 
-                <Box align="center">
+                <Box align="end">
                   <Text>Current Price:</Text>
                   <Text size="xxlarge">
                     <code>{latestPrice}</code>
@@ -169,7 +168,7 @@ function App() {
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
-                <AreaChart
+                <ComposedChart
                   width="100%"
                   height={400}
                   data={priceSet}
@@ -187,14 +186,14 @@ function App() {
                     <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
-                  <Area
-                    type="monotone"
+                  <Bar fill="#bbde8a" dataKey="price" barSize={20} />
+                  <Line
+                    // type="monotone"
                     dataKey="price"
                     stroke="#db2e9c"
                     strokeWidth={2}
-                    fill="#f7b7dc"
                   />
-                </AreaChart>
+                </ComposedChart>
               </ResponsiveContainer>
             </Box>
           )}
