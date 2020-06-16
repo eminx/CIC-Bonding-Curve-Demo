@@ -98,8 +98,8 @@ function App() {
   };
 
   const cashIn = (amount) => {
-    const newReserve = initials.reserve - amount;
-    const newSupply = initials.supply + amount;
+    const newReserve = initials.reserve + amount;
+    const newSupply = initials.supply - amount;
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
@@ -111,8 +111,8 @@ function App() {
   };
 
   const cashOut = (amount) => {
-    const newReserve = initials.reserve + amount;
-    const newSupply = initials.supply - amount;
+    const newReserve = initials.reserve - amount;
+    const newSupply = initials.supply + amount;
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
