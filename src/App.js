@@ -123,6 +123,15 @@ function App() {
     ]);
   };
 
+  const changePlayMode = () => {
+    if (playMode) {
+      setPlayMode(false);
+      setInitials(defaultInitials);
+    } else {
+      setPlayMode(true);
+    }
+  };
+
   const initialsUIProps = {
     initials,
     setInitial,
@@ -132,12 +141,18 @@ function App() {
   return (
     <Grommet theme={theme}>
       <Box background="light-1" height="100%">
-        <AppBar>
-          <Image src="https://static.wixstatic.com/media/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.png/v1/fill/w_292,h_80,al_c,q_85,usm_0.66_1.00_0.01/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.webp" />
-          <Heading level={2} textAlign="center">
-            CIC Bonding Curve Demo
-          </Heading>
-          <Text>CIC Bonding-Curve Visualiser</Text>
+        <AppBar direction="row">
+          <Image
+            width="180px"
+            src="https://static.wixstatic.com/media/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.png/v1/fill/w_292,h_80,al_c,q_85,usm_0.66_1.00_0.01/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.webp"
+          />
+          <Box>
+            <Heading level={2} textAlign="center">
+              CIC Bonding Curve Demo
+            </Heading>
+            <Text>CIC = Community Inclusion Currency</Text>
+          </Box>
+          <Box width="180px" />
         </AppBar>
         <Box width="100%" pad="medium" direction="row" justify="center">
           <Box
@@ -148,7 +163,7 @@ function App() {
             <Button
               primary={!playMode}
               label={playMode ? 'Reset Initials' : 'Start Playing'}
-              onClick={() => setPlayMode(!playMode)}
+              onClick={() => changePlayMode()}
             />
           </Box>
 
