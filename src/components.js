@@ -55,7 +55,6 @@ const InitialsUI = ({ initials, setInitial, playMode }) => (
 );
 
 const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
-  console.log(value, typeof value);
   return (
     <FormField name={name} label={label} margin={{ bottom: 'large' }}>
       <Box direction="row" align="center">
