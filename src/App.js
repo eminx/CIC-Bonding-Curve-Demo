@@ -78,20 +78,20 @@ const getPrice = (reserve, supply, trr) => {
   return price.toFixed(2);
 };
 
+const defaultPriceSetItem = {
+  step: 0,
+  price: getPrice(
+    defaultInitials.reserve,
+    defaultInitials.supply,
+    defaultInitials.trr
+  ),
+},
+
 function App() {
   const [initials, setInitials] = useState(defaultInitials);
   const [playMode, setPlayMode] = useState(false);
   const [amount, setAmount] = useState(50);
-  const [priceSet, setPriceSet] = useState([
-    {
-      step: 0,
-      price: getPrice(
-        defaultInitials.reserve,
-        defaultInitials.supply,
-        defaultInitials.trr
-      ),
-    },
-  ]);
+  const [priceSet, setPriceSet] = useState([defaultPriceSetItem]);
 
   const setInitial = (initial) => {
     setInitials({ ...initials, ...initial });
@@ -127,6 +127,7 @@ function App() {
     if (playMode) {
       setPlayMode(false);
       setInitials(defaultInitials);
+      setPriceSet([defaultPriceSetItem]);
     } else {
       setPlayMode(true);
     }
