@@ -3,6 +3,7 @@ import {
   Button,
   Box,
   Heading,
+  Image,
   Grommet,
   Form,
   FormField,
@@ -132,10 +133,11 @@ function App() {
     <Grommet theme={theme}>
       <Box background="light-1" height="100%">
         <AppBar>
+          <Image src="https://static.wixstatic.com/media/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.png/v1/fill/w_292,h_80,al_c,q_85,usm_0.66_1.00_0.01/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.webp" />
           <Heading level={2} textAlign="center">
-            <b>Interactive ABC Demo</b>
+            CIC Bonding Curve Demo
           </Heading>
-          <Text>ABC = Augmented Bonding Curve</Text>
+          <Text>CIC Bonding-Curve Visualiser</Text>
         </AppBar>
         <Box width="100%" pad="medium" direction="row" justify="center">
           <Box
