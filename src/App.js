@@ -1,17 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Box,
-  Heading,
-  Image,
-  Grommet,
-  Form,
-  FormField,
-  RangeInput,
-  Text,
-  base,
-} from 'grommet';
-import { deepMerge } from 'grommet/utils';
+import { Button, Box, Heading, Image, Grommet, Text } from 'grommet';
 import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
@@ -27,70 +15,21 @@ import {
 } from 'recharts';
 import { Atm, Money } from 'grommet-icons';
 
-const theme = deepMerge(base, {
-  global: {
-    colors: {
-      brand: '#db2e9c',
-      focus: 'none',
-    },
-    font: {
-      size: '18px',
-      height: '20px',
-    },
-  },
-  formField: {
-    border: false,
-  },
-  list: {
-    item: {
-      border: false,
-    },
-  },
-});
-
-const AppBar = (props) => (
-  <Box
-    tag="header"
-    align="center"
-    justify="between"
-    background="light-2"
-    pad={{ left: 'small', right: 'small' }}
-    style={{ zIndex: '1', textAlign: 'center' }}
-    {...props}
-  />
-);
-
-const defaultInitials = {
-  reserve: 1000,
-  supply: 4000,
-  trr: 0.25,
-};
-
-const getPrice = (reserve, supply, trr) => {
-  // [reserve, supply, trr].forEach((item) => {
-  //   if (!isNaN(item)) {
-  //     alert(`${item} is not a number!`);
-  //     return;
-  //   }
-  // });
-
-  const price = reserve / (supply * trr);
-  return price.toFixed(2);
-};
-
-const defaultPriceSetItem = {
-  step: 0,
-  price: getPrice(
-    defaultInitials.reserve,
-    defaultInitials.supply,
-    defaultInitials.trr
-  ),
-};
+import theme from './config/theme';
+import { AppBar, InitialsUI } from './components';
+import {
+  getNewSupplyCashIn,
+  getNewReserveCashOut,
+  getPrice,
+  defaultInitials,
+  defaultPriceSetItem,
+  defaultAmount,
+} from './config';
 
 function App() {
   const [initials, setInitials] = useState(defaultInitials);
   const [playMode, setPlayMode] = useState(false);
-  const [amount, setAmount] = useState(50);
+  const [amount, setAmount] = useState(defaultAmount);
   const [priceSet, setPriceSet] = useState([defaultPriceSetItem]);
 
   const setInitial = (initial) => {
@@ -98,29 +37,23 @@ function App() {
   };
 
   const cashIn = (amount) => {
-    const newReserve = initials.reserve + amount;
-    const newSupply =
-      initials.supply +
-      initials.supply *
-        (Math.pow(1 + amount / initials.reserve, initials.trr) - 1);
-
+    const { reserve, supply, trr } = initials;
+    const newReserve = reserve + amount;
+    const newSupply = getNewSupplyCashIn(reserve, supply, trr, amount);
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
       {
-        price: getPrice(newReserve, newSupply, initials.trr),
+        price: getPrice(newReserve, newSupply, trr),
         step: priceSet.length,
       },
     ]);
   };
 
   const cashOut = (amount) => {
-    const newReserve =
-      initials.reserve +
-      initials.reserve *
-        (Math.pow(1 + (-1 * amount) / initials.supply, 1 / initials.trr) - 1);
-
-    const newSupply = initials.supply - amount;
+    const { reserve, supply, trr } = initials;
+    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount);
+    const newSupply = supply - amount;
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
@@ -132,11 +65,19 @@ function App() {
   };
 
   const changePlayMode = () => {
+    const { reserve, supply, trr } = initials;
     if (playMode) {
       setPlayMode(false);
       setInitials(defaultInitials);
       setPriceSet([defaultPriceSetItem]);
+      setAmount(defaultAmount);
     } else {
+      setPriceSet([
+        {
+          price: getPrice(reserve, supply, trr),
+          step: 0,
+        },
+      ]);
       setPlayMode(true);
     }
   };
@@ -189,7 +130,8 @@ function App() {
                 <Box width="small" align="center" pad="xsmall">
                   <NumberInput
                     size="xlarge"
-                    value={amount}
+                    value={amount.toString()}
+                    decimals={0}
                     step={5}
                     min={1}
                     max={100}
@@ -254,71 +196,5 @@ function App() {
     </Grommet>
   );
 }
-
-const InitialsUI = ({ initials, setInitial, playMode }) => (
-  <Form>
-    <Field
-      name="reserve"
-      label="Collateral Reserve"
-      value={initials.reserve}
-      onChange={(value) => setInitial({ reserve: value })}
-      step={10}
-      min={0}
-      max={1000000}
-      thousandsSeparatorSymbol=" "
-      playMode={playMode}
-    />
-
-    <Field
-      name="supply"
-      label="Supply of CIC Tokens"
-      value={initials.supply}
-      onChange={(value) => setInitial({ supply: value })}
-      step={10}
-      min={0}
-      max={1000000}
-      thousandsSeparatorSymbol=" "
-      playMode={playMode}
-    />
-
-    <Field
-      name="trr"
-      label="Target Reserve Ratio"
-      value={initials.trr}
-      onChange={(value) => setInitial({ trr: value })}
-      step={0.05}
-      min={0.05}
-      max={1}
-      playMode={playMode}
-    />
-  </Form>
-);
-
-const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
-  return (
-    <FormField name={name} label={label} margin={{ bottom: 'large' }}>
-      <Box direction="row" align="center">
-        <Box width="100%" margin={{ right: 'small' }}>
-          <NumberInput
-            size="large"
-            value={value.toFixed(2)}
-            disabled={playMode}
-            onChange={({ target: { value } }) => onChange(Number(value))}
-            {...otherProps}
-          />
-        </Box>
-        {!playMode && (
-          <Box width="100%">
-            <RangeInput
-              value={value}
-              onChange={({ target: { value } }) => onChange(Number(value))}
-              {...otherProps}
-            />
-          </Box>
-        )}
-      </Box>
-    </FormField>
-  );
-};
 
 export default App;
