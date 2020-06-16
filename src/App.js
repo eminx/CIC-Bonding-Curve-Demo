@@ -54,7 +54,7 @@ const AppBar = (props) => (
     align="center"
     justify="between"
     background="light-2"
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
+    pad={{ left: 'small', right: 'small' }}
     style={{ zIndex: '1', textAlign: 'center' }}
     {...props}
   />
@@ -152,7 +152,7 @@ function App() {
             </Heading>
             <Text>CIC = Community Inclusion Currency</Text>
           </Box>
-          <Box width="180px" />
+          <Box width="180px" height="10px" />
         </AppBar>
         <Box width="100%" pad="medium" direction="row" justify="center">
           <Box
