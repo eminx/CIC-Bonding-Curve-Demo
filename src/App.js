@@ -88,6 +88,8 @@ function App() {
     playMode,
   };
 
+  const latestPrice = priceSet[priceSet.length - 1].price;
+
   return (
     <Grommet theme={theme}>
       <Box background="light-1" height="100%">
@@ -121,44 +123,49 @@ function App() {
             <Box width="70%" pad="medium" animation="zoomIn">
               <Box
                 direction="row"
-                width="large"
+                width="100%"
                 height="60px"
                 gap="small"
-                justify="center"
+                justify="around"
                 align="center"
               >
-                <Box width="small" align="center" pad="xsmall">
-                  <NumberInput
-                    size="xlarge"
-                    value={amount.toString()}
-                    decimals={0}
-                    step={5}
-                    min={1}
-                    max={100}
-                    onChange={({ target: { value } }) =>
-                      setAmount(Number(value))
-                    }
-                  />
+                <Box direction="row" align="center" gap="small">
+                  <Box width="small" align="center" pad="xsmall">
+                    <NumberInput
+                      size="xlarge"
+                      value={amount.toString()}
+                      decimals={0}
+                      step={5}
+                      min={1}
+                      max={100}
+                      onChange={({ target: { value } }) =>
+                        setAmount(Number(value))
+                      }
+                    />
+                  </Box>
+                  <Box gap="xsmall">
+                    <Button
+                      onClick={() => cashIn(amount)}
+                      color="dark-1"
+                      icon={<Money />}
+                      label="CASH IN"
+                      size="small"
+                    />
+                    <Button
+                      onClick={() => cashOut(amount)}
+                      color="dark-1"
+                      icon={<Atm />}
+                      label="CASH OUT"
+                      size="small"
+                    />
+                  </Box>
                 </Box>
-                <Box
-                  width="xsmall"
-                  onClick={() => cashIn(amount)}
-                  align="center"
-                  hoverIndicator="light-2"
-                  pad="xsmall"
-                >
-                  <Atm />
-                  <Text size="small">CASH IN</Text>
-                </Box>
-                <Box
-                  width="xsmall"
-                  onClick={() => cashOut(amount)}
-                  align="center"
-                  hoverIndicator="light-2"
-                  pad="xsmall"
-                >
-                  <Money />
-                  <Text size="small">CASH OUT</Text>
+
+                <Box align="center">
+                  <Text>Current Price:</Text>
+                  <Text size="xxlarge">
+                    <code>{latestPrice}</code>
+                  </Text>
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
