@@ -99,11 +99,10 @@ function App() {
 
   const cashIn = (amount) => {
     const newReserve = initials.reserve + amount;
-    const newSupply = (
+    const newSupply =
       initials.supply +
       initials.supply *
-        (Math.pow(1 + amount / initials.reserve, initials.trr) - 1)
-    ).toFixed(2);
+        (Math.pow(1 + amount / initials.reserve, initials.trr) - 1);
 
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
@@ -116,11 +115,10 @@ function App() {
   };
 
   const cashOut = (amount) => {
-    const newReserve = (
+    const newReserve =
       initials.reserve +
       initials.reserve *
-        (Math.pow(1 + (-1 * amount) / initials.supply, 1 / initials.trr) - 1)
-    ).toFixed(2);
+        (Math.pow(1 + (-1 * amount) / initials.supply, 1 / initials.trr) - 1);
 
     const newSupply = initials.supply - amount;
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
@@ -303,7 +301,7 @@ const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
         <Box width="100%" margin={{ right: 'small' }}>
           <NumberInput
             size="large"
-            value={value}
+            value={value.toFixed(2)}
             disabled={playMode}
             onChange={({ target: { value } }) => onChange(Number(value))}
             {...otherProps}
