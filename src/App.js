@@ -85,7 +85,7 @@ const defaultPriceSetItem = {
     defaultInitials.supply,
     defaultInitials.trr
   ),
-},
+};
 
 function App() {
   const [initials, setInitials] = useState(defaultInitials);
@@ -99,7 +99,11 @@ function App() {
 
   const cashIn = (amount) => {
     const newReserve = initials.reserve + amount;
-    const newSupply = initials.supply - amount;
+    const newSupply =
+      initials.supply +
+      initials.supply *
+        (Math.pow(1 + amount / initials.reserve, initials.trr) - 1);
+
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
@@ -111,8 +115,12 @@ function App() {
   };
 
   const cashOut = (amount) => {
-    const newReserve = initials.reserve - amount;
-    const newSupply = initials.supply + amount;
+    const newReserve =
+      initials.reserve +
+      initials.reserve *
+        (Math.pow(1 + (-1 * amount) / initials.supply, 1 / initials.trr) - 1);
+
+    const newSupply = initials.supply - amount;
     setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
     setPriceSet([
       ...priceSet,
