@@ -5,6 +5,7 @@ import {
   ResponsiveContainer,
   ComposedChart,
   // Bar,
+  Legend,
   Line,
   CartesianGrid,
   XAxis,
@@ -169,17 +170,21 @@ function App() {
                 <Box direction="row" gap="medium">
                   <Box>
                     <Box align="end">
-                      <Text size="small">Reserve Price:</Text>
+                      <Text size="small" color="brand">
+                        CIC Price:
+                      </Text>
                       <Text size="xxlarge">
-                        <code>{reservePrice}</code>
+                        <code>{cicPrice}</code>
                       </Text>
                     </Box>
                   </Box>
                   <Box>
                     <Box align="end">
-                      <Text size="small">CIC Price:</Text>
+                      <Text size="small" color="complementary">
+                        Reserve Price:
+                      </Text>
                       <Text size="xxlarge">
-                        <code>{cicPrice}</code>
+                        <code>{reservePrice}</code>
                       </Text>
                     </Box>
                   </Box>
@@ -204,6 +209,7 @@ function App() {
                     <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
+                  <Legend />
                   {/* <Bar
                     name="Reserve Price"
                     stackId="a"
@@ -222,14 +228,14 @@ function App() {
                     name="CIC Price"
                     type="natural"
                     dataKey="cicPrice"
-                    stroke="#db2e9c"
+                    stroke={theme.global.colors.brand}
                     strokeWidth={2}
                   />
                   <Line
                     name="Reserve Price"
                     type="natural"
                     dataKey="price"
-                    stroke="#db4834"
+                    stroke={theme.global.colors.complementary}
                     strokeWidth={2}
                   />
                 </ComposedChart>

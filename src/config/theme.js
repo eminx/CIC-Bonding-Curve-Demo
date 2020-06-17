@@ -6,6 +6,7 @@ const theme = deepMerge(base, {
     colors: {
       brand: '#db2e9c',
       focus: 'none',
+      complementary: '#419ae8',
     },
     font: {
       size: '18px',
