@@ -204,20 +204,34 @@ function App() {
                     <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
-                  <Bar
+                  {/* <Bar
+                    name="Reserve Price"
                     stackId="a"
                     fill="#bbde8a"
                     dataKey="price"
                     barSize={15}
                   />
                   <Bar
+                    name="Price Difference"
                     stackId="a"
                     fill="#db4834"
                     dataKey="priceDifference"
                     barSize={15}
+                  /> */}
+                  <Line
+                    name="CIC Price"
+                    type="natural"
+                    dataKey="cicPrice"
+                    stroke="#db2e9c"
+                    strokeWidth={2}
                   />
-                  <Line type="natural" dataKey="cicPrice" stroke="#db2e9c" />
-                  <Line type="natural" dataKey="price" stroke="#db4834" />
+                  <Line
+                    name="Reserve Price"
+                    type="natural"
+                    dataKey="price"
+                    stroke="#db4834"
+                    strokeWidth={2}
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </Box>
