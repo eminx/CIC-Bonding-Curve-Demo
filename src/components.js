@@ -14,7 +14,7 @@ const AppBar = (props) => (
   />
 );
 
-const InitialsUI = ({ initials, setInitial, playMode }) => {
+const InitialsUI = ({ initials, setInitial, playMode, large }) => {
   const { reserve, supply, trr } = initials;
   return (
     <Box>
@@ -35,7 +35,7 @@ const InitialsUI = ({ initials, setInitial, playMode }) => {
           min={0}
           max={1000000}
           // thousandsSeparatorSymbol=" "
-          playMode={playMode}
+          hideSlider={!large}
         />
       )}
 
@@ -56,7 +56,7 @@ const InitialsUI = ({ initials, setInitial, playMode }) => {
           min={0}
           max={1000000}
           // thousandsSeparatorSymbol=" "
-          playMode={playMode}
+          hideSlider={!large}
         />
       )}
       {playMode ? (
@@ -76,14 +76,14 @@ const InitialsUI = ({ initials, setInitial, playMode }) => {
           min={0.05}
           max={1}
           decimals={2}
-          playMode={playMode}
+          hideSlider={!large}
         />
       )}
     </Box>
   );
 };
 
-const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
+const Field = ({ name, value, label, onChange, hideSlider, ...otherProps }) => {
   return (
     <FormField name={name} label={label} margin={{ bottom: 'large' }}>
       <Box direction="row" align="center">
@@ -92,12 +92,11 @@ const Field = ({ name, value, label, onChange, playMode, ...otherProps }) => {
             size="large"
             value={value.toString()}
             decimals={0}
-            disabled={playMode}
             onChange={({ target: { value } }) => onChange(Number(value))}
             {...otherProps}
           />
         </Box>
-        {!playMode && (
+        {!hideSlider && (
           <Box width="100%">
             <RangeInput
               value={value}
