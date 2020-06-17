@@ -93,7 +93,7 @@ function App() {
   const priceSetWithCicPrices = priceSet.map((item) => ({
     ...item,
     cicPrice: (1 / item.price).toFixed(2),
-    priceDifference: ((1 / item.price).toFixed(2) - item.price).toFixed(2),
+    priceDifference: (1 / item.price - item.price).toFixed(2),
   }));
 
   return (
@@ -141,9 +141,9 @@ function App() {
                       size="xlarge"
                       value={amount.toString()}
                       decimals={0}
-                      step={5}
+                      step={100}
                       min={1}
-                      max={1000}
+                      max={initials.reserve}
                       onChange={({ target: { value } }) =>
                         setAmount(Number(value))
                       }
