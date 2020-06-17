@@ -21,8 +21,8 @@ import {
   getNewReserveCashOut,
   getPrice,
   defaultInitials,
-  defaultPriceSetItem,
   defaultAmount,
+  defaultPriceSetItem,
 } from './config';
 
 function App() {
@@ -87,7 +87,14 @@ function App() {
     playMode,
   };
 
-  const latestPrice = priceSet[priceSet.length - 1].price;
+  const reservePrice = priceSet[priceSet.length - 1].price;
+  const cicPrice = (1 / reservePrice).toFixed(2);
+
+  const priceSetWithCicPrices = priceSet.map((item) => ({
+    ...item,
+    cicPrice: (1 / item.price).toFixed(2),
+    priceDifference: ((1 / item.price).toFixed(2) - item.price).toFixed(2),
+  }));
 
   return (
     <Grommet theme={theme}>
@@ -147,31 +154,42 @@ function App() {
                       onClick={() => cashIn(amount)}
                       color="dark-1"
                       icon={<Money />}
-                      label="CASH IN"
+                      label="Contribute Reserve"
                       size="small"
                     />
                     <Button
                       onClick={() => cashOut(amount)}
                       color="dark-1"
                       icon={<Atm />}
-                      label="CASH OUT"
+                      label="Redeem CIC"
                       size="small"
                     />
                   </Box>
                 </Box>
-
-                <Box align="end">
-                  <Text>Current Price:</Text>
-                  <Text size="xxlarge">
-                    <code>{latestPrice}</code>
-                  </Text>
+                <Box direction="row" gap="medium">
+                  <Box>
+                    <Box align="end">
+                      <Text size="small">Reserve Price:</Text>
+                      <Text size="xxlarge">
+                        <code>{reservePrice}</code>
+                      </Text>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <Box align="end">
+                      <Text size="small">CIC Price:</Text>
+                      <Text size="xxlarge">
+                        <code>{cicPrice}</code>
+                      </Text>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
                 <ComposedChart
                   width="100%"
                   height={400}
-                  data={priceSet}
+                  data={priceSetWithCicPrices}
                   margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="1 3" />
@@ -186,13 +204,20 @@ function App() {
                     <Label value="price" offset={0} position="insideTopLeft" />
                   </YAxis>
                   <Tooltip />
-                  <Bar fill="#bbde8a" dataKey="price" barSize={20} />
-                  <Line
-                    type="natural"
+                  <Bar
+                    stackId="a"
+                    fill="#bbde8a"
                     dataKey="price"
-                    stroke="#db2e9c"
-                    strokeWidth={2}
+                    barSize={15}
                   />
+                  <Bar
+                    stackId="a"
+                    fill="#db4834"
+                    dataKey="priceDifference"
+                    barSize={15}
+                  />
+                  <Line type="natural" dataKey="cicPrice" stroke="#db2e9c" />
+                  <Line type="natural" dataKey="price" stroke="#db4834" />
                 </ComposedChart>
               </ResponsiveContainer>
             </Box>

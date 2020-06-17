@@ -15,10 +15,12 @@ const getPrice = (reserve, supply, trr) => {
 };
 
 const defaultInitials = {
-  reserve: 1000,
-  supply: 4000,
+  reserve: 100000,
+  supply: 400000,
   trr: 0.25,
 };
+
+const defaultAmount = 1000;
 
 const defaultPriceSetItem = {
   step: 0,
@@ -29,13 +31,11 @@ const defaultPriceSetItem = {
   ),
 };
 
-const defaultAmount = 50;
-
 export {
   getNewReserveCashOut,
   getNewSupplyCashIn,
   getPrice,
   defaultInitials,
-  defaultPriceSetItem,
   defaultAmount,
+  defaultPriceSetItem,
 };
