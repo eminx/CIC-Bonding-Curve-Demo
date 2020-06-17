@@ -16,7 +16,7 @@ import {
 import { Atm, Money } from 'grommet-icons';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI } from './components';
+import { AppBar, InitialsUI, NumberDisplay } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
@@ -113,9 +113,9 @@ function App() {
           </Box>
           <Box width="180px" height="10px" />
         </AppBar>
-        <Box width="100%" pad="medium" direction="row" justify="center">
+        <Box width="100%" pad="medium" direction="row" justify="around">
           <Box
-            width={playMode ? 'medium' : 'large'}
+            width={playMode ? 'small' : 'large'}
             animation={playMode ? 'slideLeft' : 'fadeIn'}
           >
             <InitialsUI {...initialsUIProps} />
@@ -153,14 +153,14 @@ function App() {
                   <Box gap="xsmall">
                     <Button
                       onClick={() => cashIn(amount)}
-                      color="dark-1"
+                      color="brand"
                       icon={<Money />}
                       label="Contribute Reserve"
                       size="small"
                     />
                     <Button
                       onClick={() => cashOut(amount)}
-                      color="dark-1"
+                      color="complementary"
                       icon={<Atm />}
                       label="Redeem CIC"
                       size="small"
@@ -168,26 +168,18 @@ function App() {
                   </Box>
                 </Box>
                 <Box direction="row" gap="medium">
-                  <Box>
-                    <Box align="end">
-                      <Text size="small" color="brand">
-                        CIC Price:
-                      </Text>
-                      <Text size="xxlarge">
-                        <code>{cicPrice}</code>
-                      </Text>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <Box align="end">
-                      <Text size="small" color="complementary">
-                        Reserve Price:
-                      </Text>
-                      <Text size="xxlarge">
-                        <code>{reservePrice}</code>
-                      </Text>
-                    </Box>
-                  </Box>
+                  <NumberDisplay
+                    value={cicPrice}
+                    label="CIC Price"
+                    color="brand"
+                    align="end"
+                  />
+                  <NumberDisplay
+                    value={reservePrice}
+                    label="Reserve Price"
+                    color="complementary"
+                    align="end"
+                  />
                 </Box>
               </Box>
               <ResponsiveContainer width="100%" height={400}>
