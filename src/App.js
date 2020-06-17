@@ -4,7 +4,7 @@ import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   ComposedChart,
-  Bar,
+  // Bar,
   Line,
   CartesianGrid,
   XAxis,
