@@ -151,7 +151,7 @@ const NumberDisplay = ({
           {label}
         </Text>
       )}
-      <Text size={size}>
+      <Text size={size} color={color}>
         <code>{value}</code>
       </Text>
     </Box>
