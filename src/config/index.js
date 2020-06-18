@@ -14,10 +14,16 @@ const getPrice = (reserve, supply, trr) => {
   return price.toFixed(2);
 };
 
+const getCRR = (reserve, supply) => {
+  const crr = reserve / supply;
+  return crr.toFixed(2);
+};
+
 const defaultInitials = {
   reserve: 100000,
   supply: 400000,
   trr: 0.25,
+  crr: 0.25,
 };
 
 const defaultAmount = 1000;
@@ -35,6 +41,7 @@ export {
   getNewReserveCashOut,
   getNewSupplyCashIn,
   getPrice,
+  getCRR,
   defaultInitials,
   defaultAmount,
   defaultPriceSetItem,

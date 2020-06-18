@@ -17,7 +17,7 @@ import { Atm, Money } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI, NumberDisplay } from './components';
+import { AppBar, InitialsUI, PlayMonitor, NumberDisplay } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
@@ -41,7 +41,13 @@ function App() {
     const { reserve, supply, trr } = initials;
     const newReserve = reserve + amount;
     const newSupply = getNewSupplyCashIn(reserve, supply, trr, amount);
-    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
+    const newCRR = newReserve / newSupply;
+    setInitials({
+      reserve: newReserve,
+      supply: newSupply,
+      trr: initials.trr,
+      crr: newCRR,
+    });
     setPriceSet([
       ...priceSet,
       {
@@ -55,7 +61,13 @@ function App() {
     const { reserve, supply, trr } = initials;
     const newReserve = getNewReserveCashOut(reserve, supply, trr, amount);
     const newSupply = supply - amount;
-    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
+    const newCRR = newReserve / newSupply;
+    setInitials({
+      reserve: newReserve,
+      supply: newSupply,
+      trr: initials.trr,
+      crr: newCRR,
+    });
     setPriceSet([
       ...priceSet,
       {
@@ -81,12 +93,6 @@ function App() {
       ]);
       setPlayMode(true);
     }
-  };
-
-  const initialsUIProps = {
-    initials,
-    setInitial,
-    playMode,
   };
 
   const reservePrice = priceSet[priceSet.length - 1].price;
@@ -136,7 +142,15 @@ function App() {
                       animation={playMode ? 'slideLeft' : 'fadeIn'}
                       pad={{ bottom: 'xlarge' }}
                     >
-                      <InitialsUI {...initialsUIProps} large={large} />
+                      {playMode ? (
+                        <PlayMonitor initials={initials} />
+                      ) : (
+                        <InitialsUI
+                          initials={initials}
+                          setInitial={setInitial}
+                        />
+                      )}
+
                       <Button
                         primary={!playMode}
                         label={playMode ? 'Reset' : 'Start'}
@@ -200,13 +214,13 @@ function App() {
                           >
                             <NumberDisplay
                               value={cicPrice}
-                              label="CIC Price"
+                              label="Reserve -> CIC"
                               color="brand"
                               align="end"
                             />
                             <NumberDisplay
                               value={reservePrice}
-                              label="Reserve Price"
+                              label="CIC -> Reserve"
                               color="complementary"
                               align="end"
                             />
@@ -252,14 +266,14 @@ function App() {
                     barSize={15}
                   /> */}
                             <Line
-                              name="CIC Price"
+                              name="Reserve -> CIC"
                               type="natural"
                               dataKey="cicPrice"
                               stroke={theme.global.colors.brand}
                               strokeWidth={2}
                             />
                             <Line
-                              name="Reserve Price"
+                              name="CIC -> Reserve"
                               type="natural"
                               dataKey="price"
                               stroke={theme.global.colors.complementary}
