@@ -23,30 +23,120 @@ import {
   getNewReserveCashOut,
   getPrice,
   defaultInitials,
-  defaultAmount,
+  defaultCICAmount,
+  defaultResAmount,  
   defaultPriceSetItem,
 } from './config';
 
 function App() {
   const [initials, setInitials] = useState(defaultInitials);
   const [playMode, setPlayMode] = useState(false);
-  const [amount, setAmount] = useState(defaultAmount);
+  const [cicAmount, setCICAmount] = useState(defaultCICAmount);
+  const [resAmount, setResAmount] = useState(defaultResAmount);
   const [priceSet, setPriceSet] = useState([defaultPriceSetItem]);
 
   const setInitial = (initial) => {
     setInitials({ ...initials, ...initial });
   };
 
-  const cashIn = (amount) => {
-    const { reserve, supply, trr } = initials;
-    const newReserve = reserve + amount;
-    const newSupply = getNewSupplyCashIn(reserve, supply, trr, amount);
+  const buyCIC = (cicAmount) => {
+    const { cicBal, cicPurchases} = initials;
+    const newcicPurchases = cicPurchases + cicAmount
+    const newcicBal = cicBal - cicAmount
+    setInitials({
+      reserve: initials.reserve,
+      supply: initials.supply,
+      trr: initials.trr,
+      crr: initials.crr,
+      cicBal: newcicBal,
+      resBal: initials.resBal,
+      cicPurchases: newcicPurchases,
+      cicSales: initials.cicSales,
+      resPurchases: initials.resPurchases,
+      resSales: initials.resSales,
+
+
+    });
+  };
+
+  const sellCIC = (cicAmount) => {
+    const { cicBal, cicSales} = initials;
+    const newcicSales = cicSales + cicAmount
+    const newcicBal = cicBal + cicAmount
+    setInitials({
+      reserve: initials.reserve,
+      supply: initials.supply,
+      trr: initials.trr,
+      crr: initials.crr,
+      cicBal: newcicBal,
+      resBal: initials.resBal,
+      cicPurchases: initials.cicPurchases,
+      cicSales: newcicSales,
+      resPurchases: initials.resPurchases,
+      resSales: initials.resSales,
+
+    });
+  };
+
+  const buyReserve = (resAmount) => {
+    const { resBal, resPurchases} = initials;
+    const newresPurchases = resPurchases + resAmount
+    const newresBal = resBal - resAmount
+    setInitials({
+      reserve: initials.reserve,
+      supply: initials.supply,
+      trr: initials.trr,
+      crr: initials.crr,
+      cicBal: initials.cicBal,
+       resBal: newresBal,
+      cicPurchases: initials.cicPurchases,
+      cicSales: initials.cicSales,
+      resPurchases: newresPurchases,
+      resSales: initials.resSales,
+    });
+  };
+
+  const sellReserve = (resAmount) => {
+    const { resBal, resSales} = initials;
+    const newresSales = resSales + resAmount
+    const newresBal = resBal + resAmount
+    setInitials({
+      reserve: initials.reserve,
+      supply: initials.supply,
+      trr: initials.trr,
+      crr: initials.crr,
+      cicBal: initials.cicBal,
+      resBal: newresBal,
+      cicPurchases: initials.cicPurchases,
+      cicSales: initials.cicSales,
+      resPurchases: initials.resPurchases,
+      resSales: newresSales,
+
+    });
+  };
+
+
+    
+  const cashIn = (resAmount) => {
+      const { reserve, supply, trr , cicBal, resBal} = initials;
+    const newReserve = reserve + resAmount;
+    const addedSupply = getNewSupplyCashIn(reserve, supply, trr, resAmount);
+    const newSupply = supply + addedSupply
     const newCRR = newReserve / newSupply;
+    const newcicBal = cicBal + addedSupply
+    const newresBal = resBal - resAmount
     setInitials({
       reserve: newReserve,
       supply: newSupply,
       trr: initials.trr,
       crr: newCRR,
+      cicBal: newcicBal,
+      resBal: newresBal,
+      cicPurchases: initials.cicPurchases,
+      cicSales: initials.cicSales,
+      resPurchases: initials.resPurchases,
+      resSales: initials.resSales,
+
     });
     setPriceSet([
       ...priceSet,
@@ -57,16 +147,27 @@ function App() {
     ]);
   };
 
-  const cashOut = (amount) => {
-    const { reserve, supply, trr } = initials;
-    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount);
-    const newSupply = supply - amount;
-    const newCRR = newReserve / newSupply;
+  const cashOut = (cicAmount) => {
+      const { reserve, supply, trr, cicBal, resBal} = initials;
+      const addedReserve = getNewReserveCashOut(reserve, supply, trr, cicAmount);
+      const newReserve = reserve + addedReserve
+    const newSupply = supply - cicAmount;
+      const newCRR = newReserve / newSupply;
+      const newcicBal = cicBal - cicAmount
+    const newresBal = resBal - addedReserve
+
     setInitials({
       reserve: newReserve,
       supply: newSupply,
       trr: initials.trr,
       crr: newCRR,
+      cicBal: newcicBal,
+      resBal: newresBal,
+      cicPurchases: initials.cicPurchases,
+      cicSales: initials.cicSales,
+      resPurchases: initials.resPurchases,
+      resSales: initials.resSales,
+	
     });
     setPriceSet([
       ...priceSet,
@@ -83,7 +184,8 @@ function App() {
       setPlayMode(false);
       setInitials(defaultInitials);
       setPriceSet([defaultPriceSetItem]);
-      setAmount(defaultAmount);
+      setCICAmount(defaultCICAmount);
+      setResAmount(defaultResAmount);
     } else {
       setPriceSet([
         {
@@ -95,8 +197,27 @@ function App() {
     }
   };
 
+    
+  const resetAll = () => {
+    const { reserve, supply, trr } = initials;
+    if (playMode) {
+      setInitials(defaultInitials);
+      setPriceSet([defaultPriceSetItem]);
+      setCICAmount(defaultCICAmount);
+      setResAmount(defaultResAmount);
+    } else {
+	setPriceSet([
+        {
+          price: getPrice(reserve, supply, trr),
+          step: 0,
+        },
+      ]);
+
+    }
+  };
+
   const reservePrice = priceSet[priceSet.length - 1].price;
-  const cicPrice = (1 / reservePrice).toFixed(2);
+  //const cicPrice = (1 / reservePrice).toFixed(2);
 
   const priceSetWithCicPrices = priceSet.map((item) => ({
     ...item,
@@ -153,9 +274,14 @@ function App() {
 
                       <Button
                         primary={!playMode}
-                        label={playMode ? 'Reset' : 'Start'}
+                        label={playMode ? 'Restart' : 'Start'}
                         onClick={() => changePlayMode()}
+                  />
+		      <Button
+                        label="Reset"
+                        onClick={() => resetAll()}
                       />
+
                     </Box>
                   </Col>
 
@@ -173,7 +299,7 @@ function App() {
                           justify="between"
                           align="center"
                         >
-                          <Box
+			  <Box
                             direction={large ? 'row' : 'column'}
                             align="center"
                             gap="small"
@@ -181,50 +307,137 @@ function App() {
                             <Box width="small" align="center" pad="xsmall">
                               <NumberInput
                                 size="xlarge"
-                                value={amount.toString()}
+                                value={cicAmount.toString()}
                                 decimals={0}
                                 step={100}
                                 min={1}
-                                max={initials.reserve}
+                                max={initials.cicBal}
                                 onChange={({ target: { value } }) =>
-                                  setAmount(Number(value))
+                                  setCICAmount(Number(value))
                                 }
                               />
                             </Box>
                             <Box gap="xsmall">
                               <Button
-                                onClick={() => cashIn(amount)}
+                                onClick={() => buyCIC(cicAmount)}
                                 color="brand"
                                 icon={<Money />}
-                                label="Contribute Reserve"
+                                label="Buy with CIC"
                                 size="small"
                               />
                               <Button
-                                onClick={() => cashOut(amount)}
+                                onClick={() => sellCIC(cicAmount)}
+                                color="brand"
+                                icon={<Atm />}
+                                label="Sell for CIC"
+                                size="small"
+                              />
+			      <Button
+                                onClick={() => cashOut(cicAmount)}
                                 color="complementary"
                                 icon={<Atm />}
                                 label="Redeem CIC"
                                 size="small"
                               />
+
                             </Box>
                           </Box>
+			  <Box
+                            direction={large ? 'row' : 'column'}
+                            align="center"
+                            gap="small"
+                          >
+                            <Box width="small" align="center" pad="xsmall">
+                              <NumberInput
+                                size="xlarge"
+                                value={resAmount.toString()}
+                                decimals={0}
+                                step={100}
+                                min={1}
+                                max={initials.resBal}
+                                onChange={({ target: { value } }) =>
+                                  setResAmount(Number(value))
+                                }
+                              />
+                            </Box>
+                            <Box gap="xsmall">
+                              <Button
+                                onClick={() => buyReserve(resAmount)}
+                                color="complementary"
+                                icon={<Money />}
+                                label="Buy with reserve"
+                                size="small"
+                              />
+                              <Button
+                                onClick={() => sellReserve(resAmount)}
+                                color="complementary"
+                                icon={<Atm />}
+                                label="Sell for reserve"
+                                size="small"
+                              />
+			      <Button
+                                onClick={() => cashIn(resAmount)}
+                                color="brand"
+                                icon={<Money />}
+                                label="Contribute Reserve"
+                                size="small"
+                              />
+                            </Box>
+                          </Box>
+			  
                           <Box
                             direction={large ? 'row' : 'column'}
                             gap="medium"
                           >
                             <NumberDisplay
-                              value={cicPrice}
-                              label="Reserve -> CIC"
+                              value={initials.cicBal}
+                              label="My CIC Balance"
                               color="brand"
                               align="end"
                             />
                             <NumberDisplay
-                              value={reservePrice}
-                              label="CIC -> Reserve"
+                              value={initials.resBal}
+                              label="My Reserve Balance"
                               color="complementary"
                               align="end"
                             />
                           </Box>
+			<Box
+                            direction={large ? 'row' : 'column'}
+                            gap="medium"
+                          >
+
+			  <Box size="small"
+                          >
+                            <NumberDisplay
+                              value={initials.cicPurchases}
+                              label="CIC Purchases"
+                              color="brand"
+                              align="end"
+                            />
+                            <NumberDisplay
+                              value={initials.cicSales}
+                              label="CIC Sales"
+                              color="brand"
+                              align="end"
+                            />
+                          </Box>
+			  <Box size="small"
+                          >
+                            <NumberDisplay
+                              value={initials.resPurchases}
+                              label="Reserve Purchases"
+                              color="complementary"
+                              align="end"
+                            />
+                            <NumberDisplay
+                              value={initials.resSales}
+                              label="Reserve Sales"
+                              color="complementary"
+                              align="end"
+                            />
+                          </Box>
+			    </Box>
                         </Box>
 
                         <ResponsiveContainer width="100%" height={400}>

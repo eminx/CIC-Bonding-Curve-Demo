@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, FormField, RangeInput } from 'grommet';
 import { NumberInput } from 'grommet-controls';
-import { getPrice, getCRR } from './config';
+import { getPrice, getInvPrice, getCRR } from './config';
 
 const AppBar = (props) => (
   <Box
@@ -87,12 +87,6 @@ const PlayMonitor = ({ initials }) => {
         align="start"
       />
 
-      <NumberDisplay
-        value={trr}
-        label="Target Reserve Ratio"
-        color="dark-3"
-        align="start"
-      />
 
       <NumberDisplay
         value={getCRR(reserve, supply)}
@@ -102,12 +96,27 @@ const PlayMonitor = ({ initials }) => {
       />
 
       <NumberDisplay
-        value={getPrice(reserve, supply, trr)}
-        label="Exchange Rate"
-        color="dark-1"
+        value={trr}
+        label="Target Reserve Ratio"
+        color="dark-3"
         align="start"
       />
-    </Box>
+
+
+      <NumberDisplay
+        value={getPrice(reserve, supply, trr)}
+        label="CIC -> Reserve Rate"
+        color="brand"
+        align="start"
+      />
+      <NumberDisplay
+        value={getInvPrice(reserve, supply, trr)}
+        label="Reserve -> CIC Rate"
+        color="complementary"
+        align="start"
+      />
+
+      </Box>
   );
 };
 
