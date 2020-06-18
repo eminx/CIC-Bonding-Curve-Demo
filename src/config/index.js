@@ -15,10 +15,8 @@ const getPrice = (reserve, supply, trr) => {
 };
 
 const getCRR = (reserve, supply) => {
-  const crr = reserve / (supply);
+  const crr = reserve / supply;
   return crr.toFixed(2);
-  //return console.log(parseFloat(crr*100).toFixed(2)+"%");
-  //return console.log(parseFloat(crr*100).toFixed(2)+"%");
 };
 
 const defaultInitials = {

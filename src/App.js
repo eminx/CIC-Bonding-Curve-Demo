@@ -17,12 +17,11 @@ import { Atm, Money } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI, NumberDisplay } from './components';
+import { AppBar, InitialsUI, PlayMonitor, NumberDisplay } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
   getPrice,
-  getCRR,
   defaultInitials,
   defaultAmount,
   defaultPriceSetItem,
@@ -42,8 +41,13 @@ function App() {
     const { reserve, supply, trr } = initials;
     const newReserve = reserve + amount;
     const newSupply = getNewSupplyCashIn(reserve, supply, trr, amount);
-    const newCRR = newReserve/newSupply;
-      setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr, crr: newCRR });
+    const newCRR = newReserve / newSupply;
+    setInitials({
+      reserve: newReserve,
+      supply: newSupply,
+      trr: initials.trr,
+      crr: newCRR,
+    });
     setPriceSet([
       ...priceSet,
       {
@@ -55,10 +59,15 @@ function App() {
 
   const cashOut = (amount) => {
     const { reserve, supply, trr } = initials;
-    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount)
+    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount);
     const newSupply = supply - amount;
-    const newCRR = newReserve/newSupply;
-      setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr, crr: newCRR });
+    const newCRR = newReserve / newSupply;
+    setInitials({
+      reserve: newReserve,
+      supply: newSupply,
+      trr: initials.trr,
+      crr: newCRR,
+    });
     setPriceSet([
       ...priceSet,
       {
@@ -84,12 +93,6 @@ function App() {
       ]);
       setPlayMode(true);
     }
-  };
-
-  const initialsUIProps = {
-    initials,
-    setInitial,
-    playMode,
   };
 
   const reservePrice = priceSet[priceSet.length - 1].price;
@@ -139,7 +142,15 @@ function App() {
                       animation={playMode ? 'slideLeft' : 'fadeIn'}
                       pad={{ bottom: 'xlarge' }}
                     >
-                      <InitialsUI {...initialsUIProps} large={large} />
+                      {playMode ? (
+                        <PlayMonitor initials={initials} />
+                      ) : (
+                        <InitialsUI
+                          initials={initials}
+                          setInitial={setInitial}
+                        />
+                      )}
+
                       <Button
                         primary={!playMode}
                         label={playMode ? 'Reset' : 'Start'}
