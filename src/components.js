@@ -1,6 +1,10 @@
 import React from 'react';
 import { Box, Text, FormField, RangeInput } from 'grommet';
 import { NumberInput } from 'grommet-controls';
+import {
+    getPrice,
+    getCRR
+} from './config';
 
 const AppBar = (props) => (
   <Box
@@ -15,7 +19,7 @@ const AppBar = (props) => (
 );
 
 const InitialsUI = ({ initials, setInitial, playMode, large }) => {
-  const { reserve, supply, trr } = initials;
+    const { reserve, supply, trr } = initials;
   return (
     <Box>
       {playMode ? (
@@ -35,7 +39,7 @@ const InitialsUI = ({ initials, setInitial, playMode, large }) => {
           min={0}
           max={1000000}
           // thousandsSeparatorSymbol=" "
-          hideSlider={!large}
+          //hideSlider={!large}
         />
       )}
 
@@ -56,9 +60,40 @@ const InitialsUI = ({ initials, setInitial, playMode, large }) => {
           min={0}
           max={1000000}
           // thousandsSeparatorSymbol=" "
-          hideSlider={!large}
+          //hideSlider={!large}
         />
       )}
+      {playMode ? (
+        <NumberDisplay
+          value={getCRR(reserve,supply)}
+          label="Reserve Ratio"
+          color="dark-1"
+          align="start"
+        />
+      ) : (
+        <NumberDisplay
+          value={getCRR(reserve,supply)}
+          label="Reserve Ratio"
+          color="dark-1"
+          align="start"
+        />
+      )}
+      {playMode ? (
+        <NumberDisplay
+          value={getPrice(reserve,supply, trr)}
+          label="Exchange Rate"
+          color="dark-1"
+          align="start"
+        />
+      ) : (
+        <NumberDisplay
+          value={getPrice(reserve,supply, trr)}
+          label="Exchange Rate"
+          color="dark-1"
+          align="start"
+        />
+      )}
+
       {playMode ? (
         <NumberDisplay
           value={trr}
@@ -76,7 +111,7 @@ const InitialsUI = ({ initials, setInitial, playMode, large }) => {
           min={0.05}
           max={1}
           decimals={2}
-          hideSlider={!large}
+          //hideSlider={!large}
         />
       )}
     </Box>

@@ -22,6 +22,7 @@ import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
   getPrice,
+  getCRR,
   defaultInitials,
   defaultAmount,
   defaultPriceSetItem,
@@ -41,7 +42,8 @@ function App() {
     const { reserve, supply, trr } = initials;
     const newReserve = reserve + amount;
     const newSupply = getNewSupplyCashIn(reserve, supply, trr, amount);
-    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
+    const newCRR = newReserve/newSupply;
+      setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr, crr: newCRR });
     setPriceSet([
       ...priceSet,
       {
@@ -53,9 +55,10 @@ function App() {
 
   const cashOut = (amount) => {
     const { reserve, supply, trr } = initials;
-    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount);
+    const newReserve = getNewReserveCashOut(reserve, supply, trr, amount)
     const newSupply = supply - amount;
-    setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr });
+    const newCRR = newReserve/newSupply;
+      setInitials({ reserve: newReserve, supply: newSupply, trr: initials.trr, crr: newCRR });
     setPriceSet([
       ...priceSet,
       {
@@ -200,13 +203,13 @@ function App() {
                           >
                             <NumberDisplay
                               value={cicPrice}
-                              label="CIC Price"
+                              label="Reserve -> CIC"
                               color="brand"
                               align="end"
                             />
                             <NumberDisplay
                               value={reservePrice}
-                              label="Reserve Price"
+                              label="CIC -> Reserve"
                               color="complementary"
                               align="end"
                             />
@@ -252,14 +255,14 @@ function App() {
                     barSize={15}
                   /> */}
                             <Line
-                              name="CIC Price"
+                              name="Reserve -> CIC"
                               type="natural"
                               dataKey="cicPrice"
                               stroke={theme.global.colors.brand}
                               strokeWidth={2}
                             />
                             <Line
-                              name="Reserve Price"
+                              name="CIC -> Reserve"
                               type="natural"
                               dataKey="price"
                               stroke={theme.global.colors.complementary}
