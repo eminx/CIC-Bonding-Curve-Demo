@@ -262,12 +262,10 @@ function App() {
                         />
                       )}
 
-                      <Box pad="medium" direction="row" justify="between">
-                        <Button
-                          size="small"
-                          label="Reset"
-                          onClick={() => resetAll()}
-                        />
+                      <Box gap="medium" justify="between">
+                        {playMode && (
+                          <Button label="Reset" onClick={() => resetAll()} />
+                        )}
                         <Button
                           primary={!playMode}
                           label={playMode ? 'Restart' : 'Start'}
