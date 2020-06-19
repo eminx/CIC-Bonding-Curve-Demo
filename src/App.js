@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box, Heading, Image, Grommet, Menu, Text } from 'grommet';
+import { Button, Box, Image, Grommet, Menu, Text } from 'grommet';
 import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
@@ -224,19 +224,25 @@ function App() {
             <Box background="light-1" height="100%" width="100%">
               <Container fluid style={{ width: '100%', padding: 0 }}>
                 <AppBar direction="row">
-                  <Row justify="center" style={{ width: '100%' }}>
+                  <Row
+                    justify="center"
+                    style={{ width: '100%' }}
+                    align="center"
+                  >
                     <Col lg={3}>
                       <Image
                         width="180px"
-                        src="https://static.wixstatic.com/media/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.png/v1/fill/w_292,h_80,al_c,q_85,usm_0.66_1.00_0.01/ce30dd_833dabd658664e039a2b4504f4993a91~mv2.webp"
+                        src="https://mikroklima-landingpages.s3.eu-central-1.amazonaws.com/cocoso-landingpage/grassrootseconomics-logo.png"
                       />
                     </Col>
                     <Col lg={6}>
-                      <Box>
-                        <Heading level={2} textAlign="center">
-                          CIC Bonding Curve Demo
-                        </Heading>
-                        <Text>CIC = Community Inclusion Currency</Text>
+                      <Box pad="small">
+                        <Text size="large" weight="bold" textAlign="center">
+                          CIC Demo & Play
+                        </Text>
+                        <Text size="small">
+                          CIC = Community Inclusion Currency
+                        </Text>
                       </Box>
                     </Col>
                     <Col lg={3}>
@@ -244,7 +250,7 @@ function App() {
                     </Col>
                   </Row>
                 </AppBar>
-                <Box pad="medium">
+                <Box pad="small">
                   <Row justify="center">
                     <Col lg={playMode ? 3 : 12}>
                       <Box

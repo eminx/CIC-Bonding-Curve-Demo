@@ -3,14 +3,14 @@ import { base } from 'grommet';
 
 const theme = deepMerge(base, {
   global: {
+    font: {
+      family: "'Inter', sans-serif",
+      size: '16px',
+    },
     colors: {
       brand: '#db2e9c',
       focus: 'none',
       complementary: '#419ae8',
-    },
-    font: {
-      size: '18px',
-      height: '20px',
     },
   },
   formField: {
@@ -20,6 +20,9 @@ const theme = deepMerge(base, {
     item: {
       border: false,
     },
+  },
+  heading: {
+    weight: 700,
   },
 });
 

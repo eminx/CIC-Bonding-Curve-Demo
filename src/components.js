@@ -20,7 +20,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
 
   return (
     <Box size="large">
-      <Box direction="row" justify="center" pad={{ top: 'medium' }}>
+      <Box direction="row" justify="center" pa>
         <NumberDisplay
           value={getCRR(reserve, supply)}
           label="Reserve Ratio"
@@ -119,7 +119,7 @@ const PlayMonitor = ({ initials }) => {
 
 const Field = ({ name, value, label, onChange, ...otherProps }) => {
   return (
-    <FormField name={name} label={label} margin={{ bottom: 'large' }}>
+    <FormField name={name} label={label} margin={{ bottom: 'medium' }}>
       <Box direction="row" align="center">
         <Box width="100%" margin={{ right: 'small' }}>
           <NumberInput
