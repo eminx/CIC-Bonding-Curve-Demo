@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Box, Image, Grommet, Menu, Text } from 'grommet';
+import {
+  Anchor,
+  Paragraph,
+  Button,
+  Box,
+  Image,
+  Grommet,
+  Menu,
+  Text,
+  Footer,
+} from 'grommet';
 import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
@@ -501,6 +511,41 @@ function App() {
                     )}
                   </Row>
                 </Box>
+
+                <Footer
+                  background="light-2"
+                  direction="row"
+                  width="100%"
+                  justify="center"
+                >
+                  <Box width="medium" pad="medium">
+                    <Paragraph size="small" textAlign="center">
+                      Built with{' '}
+                      <Anchor href="http://recharts.org/">Recharts</Anchor>
+                      {', '}
+                      <Anchor href="https://v2.grommet.io/">Grommet</Anchor>
+                      {', '}
+                      <Anchor href="https://reactjs.org">React </Anchor> <br />
+                      and a bunch of other source code by{' '}
+                      <Anchor href="https://infinitesimals.space">
+                        Emin Durak
+                      </Anchor>{' '}
+                      for{' '}
+                      <Anchor href="https://www.grassrootseconomics.org">
+                        Grassroots Economics.
+                      </Anchor>
+                      <br />
+                    </Paragraph>
+                    <Paragraph size="small" textAlign="center">
+                      <Anchor
+                        target="_blank"
+                        href="https://gitlab.com/grassrootseconomics/cic-bonding-curve-demo"
+                      >
+                        <code>Source Code</code>
+                      </Anchor>
+                    </Paragraph>
+                  </Box>
+                </Footer>
               </Container>
             </Box>
           );
