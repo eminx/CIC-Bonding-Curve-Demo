@@ -87,7 +87,6 @@ const PlayMonitor = ({ initials }) => {
         align="start"
       />
 
-
       <NumberDisplay
         value={getCRR(reserve, supply)}
         label="Current Reserve Ratio"
@@ -102,7 +101,6 @@ const PlayMonitor = ({ initials }) => {
         align="start"
       />
 
-
       <NumberDisplay
         value={getPrice(reserve, supply, trr)}
         label="CIC -> Reserve Rate"
@@ -115,8 +113,7 @@ const PlayMonitor = ({ initials }) => {
         color="complementary"
         align="start"
       />
-
-      </Box>
+    </Box>
   );
 };
 
@@ -151,12 +148,17 @@ const NumberDisplay = ({
   label,
   size = 'xxlarge',
   value,
+  alignLabelRight,
   ...otherProps
 }) => (
   <Box {...otherProps} pad="small">
     <Box align={align}>
       {label && (
-        <Text size="small" color={color}>
+        <Text
+          size="small"
+          color={color}
+          style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
+        >
           {label}
         </Text>
       )}
