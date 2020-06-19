@@ -530,7 +530,7 @@ function App() {
                       <Anchor href="https://infinitesimals.space">
                         Emin Durak
                       </Anchor>{' '}
-                      for{' '}
+                      and Will Ruddick for{' '}
                       <Anchor href="https://www.grassrootseconomics.org">
                         Grassroots Economics.
                       </Anchor>
