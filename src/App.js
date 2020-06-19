@@ -520,17 +520,19 @@ function App() {
                 >
                   <Box width="medium" pad="medium">
                     <Paragraph size="small" textAlign="center">
-                      Built with{' '}
+                      Built with ♥ using{' '}
                       <Anchor href="http://recharts.org/">Recharts</Anchor>
                       {', '}
                       <Anchor href="https://v2.grommet.io/">Grommet</Anchor>
                       {', '}
                       <Anchor href="https://reactjs.org">React </Anchor> <br />
-                      and a bunch of other source code by{' '}
+                      among other source code,
+                      <br />
+                      by Will Ruddick and{' '}
                       <Anchor href="https://infinitesimals.space">
-                        Emin Durak
-                      </Anchor>{' '}
-                      and Will Ruddick for{' '}
+                        Emin Durak <br />
+                      </Anchor>
+                      {' for '}
                       <Anchor href="https://www.grassrootseconomics.org">
                         Grassroots Economics.
                       </Anchor>
