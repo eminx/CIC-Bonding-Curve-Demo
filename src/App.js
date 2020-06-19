@@ -219,7 +219,6 @@ function App() {
     <Grommet theme={theme}>
       <ScreenClassRender
         render={(screenClass) => {
-          const large = ['lg', 'xl'].includes(screenClass);
           return (
             <Box background="light-1" height="100%" width="100%">
               <Container fluid style={{ width: '100%', padding: 0 }}>
@@ -289,7 +288,11 @@ function App() {
                             align="center"
                           >
                             <Box
-                              direction={large ? 'row' : 'column'}
+                              direction={
+                                ['lg', 'xl'].includes(screenClass)
+                                  ? 'row'
+                                  : 'column'
+                              }
                               align="center"
                               gap="small"
                             >
@@ -371,7 +374,11 @@ function App() {
                             </Box>
 
                             <Box
-                              direction={large ? 'row' : 'column'}
+                              direction={
+                                ['lg', 'xl'].includes(screenClass)
+                                  ? 'row'
+                                  : 'column'
+                              }
                               gap="medium"
                             >
                               <Box size="small">
