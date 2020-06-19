@@ -13,7 +13,7 @@ import {
   Label,
   Tooltip,
 } from 'recharts';
-import { Atm, Money } from 'grommet-icons';
+// import { Atm, Money } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
@@ -206,7 +206,7 @@ function App() {
     }
   };
 
-  const reservePrice = priceSet[priceSet.length - 1].price;
+  // const reservePrice = priceSet[priceSet.length - 1].price;
   //const cicPrice = (1 / reservePrice).toFixed(2);
 
   const priceSetWithCicPrices = priceSet.map((item) => ({
