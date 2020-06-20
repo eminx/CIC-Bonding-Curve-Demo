@@ -75,14 +75,14 @@ const PlayMonitor = ({ initials }) => {
     <Box size="small">
       <NumberDisplay
         value={reserve}
-        label="Reserve"
+        label="Total Reserve"
         color="dark-1"
         align="start"
       />
 
       <NumberDisplay
         value={supply}
-        label="Supply"
+        label="Total CIC Supply"
         color="dark-1"
         align="start"
       />
@@ -98,19 +98,6 @@ const PlayMonitor = ({ initials }) => {
         value={trr}
         label="Target Reserve Ratio"
         color="dark-3"
-        align="start"
-      />
-
-      <NumberDisplay
-        value={getPrice(reserve, supply, trr)}
-        label="CIC -> Reserve Rate"
-        color="brand"
-        align="start"
-      />
-      <NumberDisplay
-        value={getInvPrice(reserve, supply, trr)}
-        label="Reserve -> CIC Rate"
-        color="complementary"
         align="start"
       />
     </Box>
@@ -169,4 +156,28 @@ const NumberDisplay = ({
   </Box>
 );
 
-export { AppBar, Field, InitialsUI, PlayMonitor, NumberDisplay };
+const NumberDisplayInline = ({
+  align = 'end',
+  color,
+  label,
+  size = 'small',
+  value,
+  alignLabelRight,
+  ...otherProps
+}) => (
+  <Box {...otherProps} pad="small">
+    <Box align={align}>
+      {label && (
+        <Text
+          size="small"
+          color={color}
+          style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
+        >
+          {label}<code>{value}</code>
+        </Text>
+      )}
+    </Box>
+  </Box>
+);
+
+export { AppBar, Field, InitialsUI, PlayMonitor, NumberDisplay, NumberDisplayInline };

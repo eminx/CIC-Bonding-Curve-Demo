@@ -1,10 +1,10 @@
 const getNewSupplyCashIn = (reserve, supply, trr, amount) => {
-  const newSupply = supply * (Math.pow(1 + amount / reserve, trr) - 1);
+    const newSupply = supply * (Math.pow(1 + amount / reserve, trr) - 1);
   return Math.round(newSupply);
 };
 
 const getNewReserveCashOut = (reserve, supply, trr, amount) => {
-  const newReserve = reserve * (Math.pow(1 + (-1 * amount) / supply, 1 / trr) - 1);
+    const newReserve = reserve * (Math.pow(1 + (-1 * amount) / supply, 1 / trr) - 1);
   return Math.round(newReserve);
 };
 
