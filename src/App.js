@@ -282,7 +282,6 @@ function App() {
                           Community Inclusion Currency (CIC)
                         </Text>
                         <Text size="small">Demo & Play</Text>
-                        <Text size="small">Demo & Play</Text>
                       </Box>
                     </Col>
                     <Col lg={3}>
