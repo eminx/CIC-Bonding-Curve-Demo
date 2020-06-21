@@ -6,7 +6,7 @@ import {
   Box,
   Image,
   Grommet,
-  Menu,
+  //Menu,
   Text,
   Footer,
 } from 'grommet';
@@ -14,7 +14,7 @@ import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   ComposedChart,
-  Bar,
+  //Bar,
   Legend,
   Line,
   CartesianGrid,
@@ -25,11 +25,11 @@ import {
   Area,
   //AreaChart,
 } from 'recharts';
-import { Atm, Money, Cafeteria, Restroom, Tools, Bike, Basket, Book, PhoneVertical, Grow } from 'grommet-icons';
+import { Atm, Money, Cafeteria, Tools, Bike, Basket, Book, Grow } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI, PlayMonitor, NumberDisplay, NumberDisplayInline } from './components';
+import { AppBar, InitialsUI, PlayMonitor,  NumberDisplayInline } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
@@ -230,25 +230,6 @@ function App() {
         },
       ]);
       setPlayMode(true);
-    }
-  };
-
-  const resetAll = () => {
-      const { reserve, supply, trr , cicBal, resBal} = initials;
-    if (playMode) {
-      setInitials(initials);
-      setPriceSet([defaultPriceSetItem]);
-      setCICAmount(defaultCICAmount);
-      setResAmount(defaultResAmount);
-    } else {
-      setPriceSet([
-        {
-	  trr: trr,
-	  crr: getCRR(reserve, supply),
-	  price: getPrice(reserve, supply, trr),
-          step: 0,
-        },
-      ]);
     }
   };
 
