@@ -14,7 +14,7 @@ import { NumberInput } from 'grommet-controls';
 import {
   ResponsiveContainer,
   ComposedChart,
-  // Bar,
+  Bar,
   Legend,
   Line,
   CartesianGrid,
@@ -22,16 +22,20 @@ import {
   YAxis,
   Label,
   Tooltip,
+  Area,
+  //AreaChart,
 } from 'recharts';
-// import { Atm, Money } from 'grommet-icons';
+import { Atm, Money, Cafeteria, Restroom, Tools, Bike, Basket, Book, PhoneVertical, Grow } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI, PlayMonitor, NumberDisplay } from './components';
+import { AppBar, InitialsUI, PlayMonitor, NumberDisplay, NumberDisplayInline } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
   getPrice,
+  getInvPrice,
+  getCRR,
   defaultInitials,
   defaultCICAmount,
   defaultResAmount,
@@ -51,24 +55,28 @@ function App() {
 
   const buyCIC = (cicAmount) => {
     const { cicBal, cicPurchases } = initials;
-    const newcicPurchases = cicPurchases + cicAmount;
-    const newcicBal = cicBal - cicAmount;
-    setInitials({
-      reserve: initials.reserve,
-      supply: initials.supply,
-      trr: initials.trr,
-      crr: initials.crr,
-      cicBal: newcicBal,
-      resBal: initials.resBal,
-      cicPurchases: newcicPurchases,
-      cicSales: initials.cicSales,
-      resPurchases: initials.resPurchases,
-      resSales: initials.resSales,
-    });
+      if (cicAmount <= cicBal) {
+      const newcicPurchases = cicPurchases + cicAmount;
+      const newcicBal = cicBal - cicAmount;
+      setInitials({
+        reserve: initials.reserve,
+        supply: initials.supply,
+        trr: initials.trr,
+        crr: initials.crr,
+        cicBal: newcicBal,
+        resBal: initials.resBal,
+        cicPurchases: newcicPurchases,
+        cicSales: initials.cicSales,
+        resPurchases: initials.resPurchases,
+        resSales: initials.resSales,
+      });
+      }  
   };
 
   const sellCIC = (cicAmount) => {
-    const { cicBal, cicSales } = initials;
+      const { supply, cicBal, cicSales } = initials;
+      if ((cicBal+cicAmount)<=supply){ //You can't have more than the total supply
+      
     const newcicSales = cicSales + cicAmount;
     const newcicBal = cicBal + cicAmount;
     setInitials({
@@ -83,10 +91,12 @@ function App() {
       resPurchases: initials.resPurchases,
       resSales: initials.resSales,
     });
+      }
   };
 
   const buyReserve = (resAmount) => {
     const { resBal, resPurchases } = initials;
+    if (resAmount <= resBal) {
     const newresPurchases = resPurchases + resAmount;
     const newresBal = resBal - resAmount;
     setInitials({
@@ -101,6 +111,7 @@ function App() {
       resPurchases: newresPurchases,
       resSales: initials.resSales,
     });
+    }
   };
 
   const sellReserve = (resAmount) => {
@@ -121,14 +132,22 @@ function App() {
     });
   };
 
+    const getCashIn =  (resAmount) => {
+	const { reserve, supply, trr } = initials;
+	const addedSupply = getNewSupplyCashIn(reserve, supply, trr, resAmount);
+	return addedSupply;
+    };
+
+    
   const cashIn = (resAmount) => {
-    const { reserve, supply, trr, cicBal, resBal } = initials;
+      const { reserve, supply, trr, cicBal, resBal } = initials;
+    if (resAmount <= resBal) {
     const newReserve = reserve + resAmount;
     const addedSupply = getNewSupplyCashIn(reserve, supply, trr, resAmount);
     const newSupply = supply + addedSupply;
     const newCRR = newReserve / newSupply;
     const newcicBal = cicBal + addedSupply;
-    const newresBal = resBal - resAmount;
+    const newresBal = Math.round(resBal - resAmount);
     setInitials({
       reserve: newReserve,
       supply: newSupply,
@@ -144,44 +163,57 @@ function App() {
     setPriceSet([
       ...priceSet,
       {
-        price: getPrice(newReserve, newSupply, trr),
+	trr: trr,
+	crr: getCRR(newReserve, newSupply),
+	price: getPrice(newReserve, newSupply, trr),
         step: priceSet.length,
       },
     ]);
+    }
   };
 
+    const getCashOut =  (cicAmount) => {
+	const { reserve, supply, trr } = initials;
+	const addedReserve = getNewReserveCashOut(reserve, supply, trr, cicAmount);
+	return -1*addedReserve;
+    };
+	
   const cashOut = (cicAmount) => {
-    const { reserve, supply, trr, cicBal, resBal } = initials;
-    const addedReserve = getNewReserveCashOut(reserve, supply, trr, cicAmount);
-    const newReserve = reserve + addedReserve;
-    const newSupply = supply - cicAmount;
-    const newCRR = newReserve / newSupply;
-    const newcicBal = cicBal - cicAmount;
-    const newresBal = resBal - addedReserve;
+      const { reserve, supply, trr, cicBal, resBal } = initials;
+      if (cicAmount <= cicBal){
+      const addedReserve = getNewReserveCashOut(reserve, supply, trr, cicAmount);
+      const newReserve = reserve + addedReserve;
+	  const newSupply = supply - cicAmount;
+	  const newCRR = newReserve / newSupply;
+	  const newcicBal = Math.round(cicBal - cicAmount);
+      const newresBal = resBal - addedReserve;
 
-    setInitials({
-      reserve: newReserve,
-      supply: newSupply,
-      trr: initials.trr,
-      crr: newCRR,
-      cicBal: newcicBal,
-      resBal: newresBal,
-      cicPurchases: initials.cicPurchases,
-      cicSales: initials.cicSales,
-      resPurchases: initials.resPurchases,
-      resSales: initials.resSales,
-    });
-    setPriceSet([
-      ...priceSet,
-      {
-        price: getPrice(newReserve, newSupply, initials.trr),
-        step: priceSet.length,
-      },
-    ]);
+      setInitials({
+        reserve: newReserve,
+        supply: newSupply,
+        trr: initials.trr,
+        crr: newCRR,
+        cicBal: newcicBal,
+        resBal: newresBal,
+        cicPurchases: initials.cicPurchases,
+        cicSales: initials.cicSales,
+        resPurchases: initials.resPurchases,
+        resSales: initials.resSales,
+      });
+      setPriceSet([
+        ...priceSet,
+        {
+       	  trr: trr,
+	  crr: getCRR(newReserve, newSupply),
+	  price: getPrice(newReserve, newSupply, initials.trr),
+          step: priceSet.length,
+        },
+      ]);
+      }
   };
 
   const changePlayMode = () => {
-    const { reserve, supply, trr } = initials;
+      const { reserve, supply, trr} = initials;
     if (playMode) {
       setPlayMode(false);
       setInitials(defaultInitials);
@@ -191,7 +223,9 @@ function App() {
     } else {
       setPriceSet([
         {
-          price: getPrice(reserve, supply, trr),
+	  trr: trr,
+	  crr: getCRR(reserve, supply),
+	  price: getPrice(reserve, supply, trr),
           step: 0,
         },
       ]);
@@ -200,16 +234,18 @@ function App() {
   };
 
   const resetAll = () => {
-    const { reserve, supply, trr } = initials;
+      const { reserve, supply, trr , cicBal, resBal} = initials;
     if (playMode) {
-      setInitials(defaultInitials);
+      setInitials(initials);
       setPriceSet([defaultPriceSetItem]);
       setCICAmount(defaultCICAmount);
       setResAmount(defaultResAmount);
     } else {
       setPriceSet([
         {
-          price: getPrice(reserve, supply, trr),
+	  trr: trr,
+	  crr: getCRR(reserve, supply),
+	  price: getPrice(reserve, supply, trr),
           step: 0,
         },
       ]);
@@ -248,10 +284,10 @@ function App() {
                     <Col lg={6}>
                       <Box pad="small">
                         <Text size="large" weight="bold" textAlign="center">
-                          CIC Demo & Play
+                  Community Inclusion Currency (CIC)
                         </Text>
                         <Text size="small">
-                          CIC = Community Inclusion Currency
+                          Demo & Play
                         </Text>
                       </Box>
                     </Col>
@@ -279,9 +315,9 @@ function App() {
                         )}
 
                         <Box gap="medium" justify="between">
-                          {playMode && (
+                          {/*playMode && (
                             <Button label="Reset" onClick={() => resetAll()} />
-                          )}
+                          )*/}
                           <Button
                             primary={!playMode}
                             label={playMode ? 'Restart' : 'Start'}
@@ -309,145 +345,234 @@ function App() {
                               align="center"
                               gap="small"
                             >
-                              <Box width="small" align="start" pad="xsmall">
+                            <Box width="small" align="start" pad="xsmall">
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                              <Button
+                                onClick={() => buyCIC(50)}
+                                color="brand"
+                                icon={<Basket />}
+                                label="Buy 50"
+                                size="xsmall"
+                              />
+                              <Button
+                                onClick={() => buyCIC(250)}
+                                color="brand"
+                                icon={<Tools />}
+                                label="Buy 250"
+                                size="xsmall"
+                              />
+			    </Box>
+
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                            <Button
+                                onClick={() => sellCIC(300)}
+                                color="brand"
+                                icon={<Cafeteria />}
+                                label="Sell 300"
+                                size="xsmall"
+                            />
+                            <Button
+                                onClick={() => sellCIC(500)}
+                                color="brand"
+                                icon={<Grow />}
+                                label="Sell 500"
+                                size="xsmall"
+                            />
+			    </Box>
+			         <NumberDisplayInline
+                                  value={initials.cicBal}
+                                  label="My CIC: "
+                                  color="brand"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
+
+                                <NumberDisplayInline
+                                  value={initials.cicPurchases}
+                                  label="Bought: "
+                                  color="brand"
+                                  align="end"
+                                  alignLabelRight
+                                  size="large"
+                                />
+                                <NumberDisplayInline
+                                  value={initials.cicSales}
+                                  label="Sold: "
+                                  color="brand"
+                                  align="end"
+                                  alignLabelRight
+                                  size="large"
+                                />
+
+			
                                 <NumberInput
                                   size="medium"
                                   value={cicAmount.toString()}
                                   decimals={0}
                                   step={100}
-                                  min={1}
+                                  min={0}
                                   max={initials.cicBal}
                                   onChange={({ target: { value } }) =>
                                     setCICAmount(Number(value))
                                   }
                                 />
-                                <Menu
-                                  label={
-                                    <Text size="xsmall" weight="bold">
-                                      CIC ACTIONS
-                                    </Text>
-                                  }
-                                  alignSelf="end"
-                                  items={[
-                                    {
-                                      label: 'Buy with CIC',
-                                      onClick: () => buyCIC(cicAmount),
-                                    },
-                                    {
-                                      label: 'Sell for CIC',
-                                      onClick: () => sellCIC(cicAmount),
-                                    },
-                                    {
-                                      label: 'Redeem CIC',
-                                      onClick: () => cashOut(cicAmount),
-                                    },
-                                  ]}
-                                  background="light-1"
-                                  dropAlign={{ top: 'bottom', right: 'right' }}
-                                />
-                              </Box>
+			      <Button
+                                onClick={() => cashOut(cicAmount)}
+                                color="brand"
+                                icon={<Atm />}
+                                label="Redeem CIC"
+                                size="small"
+                              />
+			       <NumberDisplayInline
+                               value={getPrice(initials.reserve, initials.supply, initials.trr)}
+                               label="Rate: "
+                               color="brand"
+                               align="start"
+                               />
+                                <NumberDisplayInline
+                                  value={getCashOut(cicAmount)}
+                                  label="+Reserve: "
+                                  color="brand"
+                                  alignLabelRight
+                                  size="small"
+                            />
 
-                              <Box width="small" align="start" pad="xsmall">
+
+
+
+                        </Box>
+			    </Box>
+			    
+
+			    <Box
+                              direction={large ? 'row' : 'column'}
+                              align="center"
+                              gap="small"
+                            >
+
+                            <Box width="small" align="start" pad="xsmall">
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                              <Button
+                                onClick={() => buyReserve(100)}
+                                color="complementary"
+                                icon={<Bike />}
+                                label="Buy 100"
+                                size="xsmall"
+                              />
+                              <Button
+                                onClick={() => buyReserve(100)}
+                                color="complementary"
+                                icon={<Book />}
+                                label="Buy 100"
+                                size="xsmall"
+                              />
+			    </Box>
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                            <Button
+                                onClick={() => sellReserve(300)}
+                                color="complementary"
+                                icon={<Cafeteria />}
+                                label="Sell 300"
+                                size="xsmall"
+                            />
+			    <Button
+                                onClick={() => sellReserve(500)}
+                                color="complementary"
+                                icon={<Grow />}
+                                label="Sell 500"
+                                size="xsmall"
+                            />
+			    </Box>
+
+                                <NumberDisplayInline
+                                  value={initials.resBal}
+                                  label="My Reserve: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
+
+                                <NumberDisplayInline
+                                  value={initials.resPurchases}
+                                  label="Bought: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                            />
+                                <NumberDisplayInline
+                                  value={initials.resSales}
+                                  label="Sold: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
+
+			
+
                                 <NumberInput
                                   size="medium"
                                   value={resAmount.toString()}
                                   decimals={0}
                                   step={100}
-                                  min={1}
+                                  min={0}
                                   max={initials.resBal}
                                   onChange={({ target: { value } }) =>
                                     setResAmount(Number(value))
                                   }
                                 />
-                                <Menu
-                                  label={
-                                    <Text size="xsmall" weight="bold">
-                                      RESERVE ACTIONS
-                                    </Text>
-                                  }
-                                  alignSelf="end"
-                                  items={[
-                                    {
-                                      label: 'Buy with Reserve',
-                                      onClick: () => buyReserve(resAmount),
-                                    },
-                                    {
-                                      label: 'Sell for Reserve',
-                                      onClick: () => sellReserve(resAmount),
-                                    },
-                                    {
-                                      label: 'Contribute Reserve',
-                                      onClick: () => cashIn(resAmount),
-                                    },
-                                  ]}
-                                  background="light-1"
-                                  dropAlign={{ top: 'bottom', right: 'right' }}
-                                />
-                              </Box>
-                            </Box>
 
-                            <Box
-                              direction={large ? 'row' : 'column'}
-                              gap="medium"
-                            >
-                              <Box size="small">
-                                <NumberDisplay
-                                  value={initials.cicPurchases}
-                                  label="CIC Purchases"
-                                  color="brand"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                                <NumberDisplay
-                                  value={initials.cicSales}
-                                  label="CIC Sales"
-                                  color="brand"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                              </Box>
-                              <Box size="small">
-                                <NumberDisplay
-                                  value={initials.resPurchases}
-                                  label="Reserve Purchases"
-                                  color="complementary"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                                <NumberDisplay
-                                  value={initials.resSales}
-                                  label="Reserve Sales"
-                                  color="complementary"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                              </Box>
-                              <Box size="small">
-                                <NumberDisplay
-                                  value={initials.cicBal}
-                                  label="My CIC Balance"
-                                  color="dark-1"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                                <NumberDisplay
-                                  value={initials.resBal}
-                                  label="My Reserve Balance"
-                                  color="dark-1"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                              </Box>
-                            </Box>
-                          </Box>
+			      <Button
+                                onClick={() => cashIn(resAmount)}
+                                color="complementary"
+                                icon={<Money />}
+                                label="Contribute Reserve"
+                                size="xsmall"
+                            />
+			    <NumberDisplayInline
+			value={getInvPrice(initials.reserve, initials.supply, initials.trr)}
+			label="Rate: "
+			color="complementary"
+			align="start"
+			    />
+			    <NumberDisplayInline
+                        value={getCashIn(resAmount)}
+                        label="+CIC : "
+                        color="complementary"
+                        alignLabelRight
+                        size="small"
+                            />
 
-                          <ResponsiveContainer width="100%" height={400}>
+			
+                        </Box>
+
+			
+			</Box>
+
+                          <ResponsiveContainer width="50%" height={400}>
                             <ComposedChart
                               width="100%"
                               height={400}
@@ -459,7 +584,15 @@ function App() {
                                 bottom: 0,
                               }}
                             >
-                              <CartesianGrid strokeDasharray="1 3" />
+                            <CartesianGrid strokeDasharray="1 3" />
+			    <YAxis>
+                              <Label
+                                value=""
+                                offset={0}
+                                position="insideTopLeft"
+                              />
+                            </YAxis>
+
                               <XAxis dataKey="step">
                                 <Label
                                   value="conversions"
@@ -467,45 +600,42 @@ function App() {
                                   position="insideBottomRight"
                                 />
                               </XAxis>
-                              <YAxis>
-                                <Label
-                                  value="price"
-                                  offset={0}
-                                  position="insideTopLeft"
-                                />
-                              </YAxis>
                               <Tooltip />
                               <Legend />
-                              {/* <Bar
-                                name="Reserve Price"
-                                stackId="a"
-                                fill="#bbde8a"
-                                dataKey="price"
+                            {/*<Bar
+                                name="Reserve Ratio"
+                                stackId="a"                     
+  			        fill={theme.global.colors.complementary}
+                                dataKey="crr"
                                 barSize={15}
-                              />
-                              <Bar
-                                name="Price Difference"
-                                stackId="a"
-                                fill="#db4834"
-                                dataKey="priceDifference"
-                                barSize={15}
-                              /> */}
-                              <Line
-                                name="Reserve -> CIC"
+                              />*/}
+                            <Line
+                                name="Excahnge Rate"
                                 type="natural"
-                                dataKey="cicPrice"
+                                dataKey="price"
                                 stroke={theme.global.colors.brand}
                                 strokeWidth={2}
-                              />
-                              <Line
-                                name="CIC -> Reserve"
+                            />
+			     <Area
+                                name="Reserve Ratio"
                                 type="natural"
-                                dataKey="price"
+                                dataKey="crr"
                                 stroke={theme.global.colors.complementary}
                                 strokeWidth={2}
+                            />
+			    <Line
+                                name="Target Reserve Ratio"
+                                type="natural"
+                                dataKey="trr"
+                                stroke={theme.global.colors.black}
+                                strokeWidth={4}
+			        strokeDasharray="3 3"
                               />
+
                             </ComposedChart>
-                          </ResponsiveContainer>
+                            </ResponsiveContainer>
+
+			                            </Box>
                         </Box>
                       </Col>
                     )}
@@ -519,25 +649,6 @@ function App() {
                   justify="center"
                 >
                   <Box width="medium" pad="medium">
-                    <Paragraph size="small" textAlign="center">
-                      Built with ♥ using{' '}
-                      <Anchor href="http://recharts.org/">Recharts</Anchor>
-                      {', '}
-                      <Anchor href="https://v2.grommet.io/">Grommet</Anchor>
-                      {', '}
-                      <Anchor href="https://reactjs.org">React </Anchor> <br />
-                      among other source code,
-                      <br />
-                      by Will Ruddick and{' '}
-                      <Anchor href="https://infinitesimals.space">
-                        Emin Durak <br />
-                      </Anchor>
-                      {' for '}
-                      <Anchor href="https://www.grassrootseconomics.org">
-                        Grassroots Economics.
-                      </Anchor>
-                      <br />
-                    </Paragraph>
                     <Paragraph size="small" textAlign="center">
                       <Anchor
                         target="_blank"

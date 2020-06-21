@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, FormField, RangeInput } from 'grommet';
 import { NumberInput } from 'grommet-controls';
-import { getPrice, getInvPrice, getCRR } from './config';
+import { setInitCICBal, setInitResBal, getPrice, getInvPrice, getCRR } from './config';
 
 const AppBar = (props) => (
   <Box
@@ -15,8 +15,9 @@ const AppBar = (props) => (
   />
 );
 
+
 const InitialsUI = ({ initials, setInitial, large }) => {
-  const { reserve, supply, trr } = initials;
+    const { reserve, supply, trr, cicBal, resBal} = initials;
 
   return (
     <Box size="large">
@@ -36,9 +37,9 @@ const InitialsUI = ({ initials, setInitial, large }) => {
       </Box>
       <Field
         name="reserve"
-        label="Collateral Reserve"
+        label="Contribute Collateral to Reserve"
         value={reserve}
-        onChange={(value) => setInitial({ reserve: value })}
+      onChange={(value) => setInitial({ reserve: value, resBal: setInitResBal(value)})}
         step={10}
         min={0}
         max={1000000}
@@ -46,9 +47,9 @@ const InitialsUI = ({ initials, setInitial, large }) => {
       />
       <Field
         name="supply"
-        label="Supply of CIC Tokens"
+        label="Create a supply of CIC Tokens"
         value={supply}
-        onChange={(value) => setInitial({ supply: value })}
+		onChange={(value) => setInitial({ supply: value, cicBal: setInitCICBal(value)  })}
         step={10}
         min={0}
         max={1000000}
@@ -61,7 +62,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         value={trr}
         onChange={(value) => setInitial({ trr: value })}
         step={0.05}
-        min={0.05}
+        min={0.01}
         max={1}
         decimals={2}
       />
@@ -75,22 +76,22 @@ const PlayMonitor = ({ initials }) => {
     <Box size="small">
       <NumberDisplay
         value={reserve}
-        label="Reserve"
-        color="dark-1"
+        label="Total Reserve"
+        color="complementary"
         align="start"
       />
 
       <NumberDisplay
         value={supply}
-        label="Supply"
-        color="dark-1"
+        label="Total CIC Supply"
+        color="brand"
         align="start"
       />
 
       <NumberDisplay
         value={getCRR(reserve, supply)}
         label="Current Reserve Ratio"
-        color="dark-1"
+        color="complementary"
         align="start"
       />
 
@@ -98,19 +99,6 @@ const PlayMonitor = ({ initials }) => {
         value={trr}
         label="Target Reserve Ratio"
         color="dark-3"
-        align="start"
-      />
-
-      <NumberDisplay
-        value={getPrice(reserve, supply, trr)}
-        label="CIC -> Reserve Rate"
-        color="brand"
-        align="start"
-      />
-      <NumberDisplay
-        value={getInvPrice(reserve, supply, trr)}
-        label="Reserve -> CIC Rate"
-        color="complementary"
         align="start"
       />
     </Box>
@@ -169,4 +157,28 @@ const NumberDisplay = ({
   </Box>
 );
 
-export { AppBar, Field, InitialsUI, PlayMonitor, NumberDisplay };
+const NumberDisplayInline = ({
+  align = 'end',
+  color,
+  label,
+  size = 'small',
+  value,
+  alignLabelRight,
+  ...otherProps
+}) => (
+  <Box {...otherProps} pad="xsmall">
+    <Box align={align}>
+      {label && (
+        <Text
+          size="small"
+          color={color}
+          style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
+        >
+          {label}<code>{value}</code>
+        </Text>
+      )}
+    </Box>
+  </Box>
+);
+
+export { AppBar, Field, InitialsUI, PlayMonitor, NumberDisplay, NumberDisplayInline };

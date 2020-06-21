@@ -11,6 +11,8 @@ const theme = deepMerge(base, {
       brand: '#db2e9c',
       focus: 'none',
       complementary: '#419ae8',
+      darkgray: '#A9A9A9',
+      black: '#000000',
     },
   },
   formField: {
