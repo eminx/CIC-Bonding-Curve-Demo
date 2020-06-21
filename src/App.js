@@ -297,7 +297,7 @@ function App() {
                 </AppBar>
                 <Main style={{ minHeight: '100vh' }}>
                   <Row style={{ marginLeft: 0, marginRight: 0 }}>
-                    <Col lg={playMode ? 3 : 12}>
+                    <Col lg={playMode ? 2.5 : 12}>
                       <Box
                         width={playMode ? 'small' : 'large'}
                         style={{ margin: '0 auto' }}
@@ -327,47 +327,38 @@ function App() {
                     </Col>
 
                     {playMode && (
-                      <Col lg={9}>
+                      <Col lg={9.5}>
                         <Box
                           animation="zoomIn"
                           pad={{ top: 'medium', bottom: 'medium' }}
                         >
-                          <Box
-                            direction="row"
-                            width="100%"
-                            gap="small"
-                            justify="between"
-                            align="center"
-                          >
-                            <Box
-                              direction={large ? 'row' : 'column'}
-                              align="center"
-                              gap="small"
-                            >
-                              <Box width="small" align="start" pad="xsmall">
+                          <Row>
+                            <Col lg={3}>
+                              <Box align="start" pad="xsmall" gap="small">
                                 <Box
-                                  direction={'row'}
+                                  direction="row"
                                   align="center"
                                   gap="xsmall"
+                                  width="100%"
                                 >
                                   <Button
                                     onClick={() => buyCIC(50)}
                                     color="brand"
                                     icon={<Basket />}
                                     label="Buy 50"
-                                    size="xsmall"
+                                    size="small"
                                   />
                                   <Button
                                     onClick={() => buyCIC(250)}
                                     color="brand"
                                     icon={<Tools />}
                                     label="Buy 250"
-                                    size="xsmall"
+                                    size="small"
                                   />
                                 </Box>
 
                                 <Box
-                                  direction={'row'}
+                                  direction="row"
                                   align="center"
                                   gap="xsmall"
                                 >
@@ -411,53 +402,57 @@ function App() {
                                   alignLabelRight
                                   size="large"
                                 />
-
-                                <NumberInput
-                                  size="medium"
-                                  value={cicAmount.toString()}
-                                  decimals={0}
-                                  step={100}
-                                  min={0}
-                                  max={initials.cicBal}
-                                  onChange={({ target: { value } }) =>
-                                    setCICAmount(Number(value))
-                                  }
-                                />
-                                <Button
-                                  onClick={() => cashOut(cicAmount)}
-                                  color="brand"
-                                  icon={<Atm />}
-                                  label="Redeem CIC"
-                                  size="small"
-                                />
-                                <NumberDisplayInline
-                                  value={getPrice(
-                                    initials.reserve,
-                                    initials.supply,
-                                    initials.trr
-                                  )}
-                                  label="Rate: "
-                                  color="brand"
-                                  align="start"
-                                />
-                                <NumberDisplayInline
-                                  value={getCashOut(cicAmount)}
-                                  label="+Reserve: "
-                                  color="brand"
-                                  alignLabelRight
-                                  size="small"
-                                />
+                                <Box pad={{ top: 'small' }} gap="small">
+                                  <NumberInput
+                                    size="small"
+                                    width="small"
+                                    value={cicAmount.toString()}
+                                    decimals={0}
+                                    step={100}
+                                    min={0}
+                                    max={initials.cicBal}
+                                    onChange={({ target: { value } }) =>
+                                      setCICAmount(Number(value))
+                                    }
+                                  />
+                                  <Button
+                                    primary
+                                    onClick={() => cashOut(cicAmount)}
+                                    color="brand"
+                                    icon={<Atm />}
+                                    label="Redeem CIC"
+                                    size="xsmall"
+                                  />
+                                  <NumberDisplayInline
+                                    value={getPrice(
+                                      initials.reserve,
+                                      initials.supply,
+                                      initials.trr
+                                    )}
+                                    label="Rate: "
+                                    color="brand"
+                                    align="start"
+                                  />
+                                  <NumberDisplayInline
+                                    value={getCashOut(cicAmount)}
+                                    label="+Reserve: "
+                                    color="brand"
+                                    alignLabelRight
+                                    size="small"
+                                  />
+                                </Box>
                               </Box>
-                            </Box>
+                            </Col>
 
-                            <Box
-                              direction={large ? 'row' : 'column'}
-                              align="center"
-                              gap="small"
-                            >
-                              <Box width="small" align="start" pad="xsmall">
+                            <Col lg={3}>
+                              <Box
+                                align="start"
+                                pad="xsmall"
+                                gap="small"
+                                width="100%"
+                              >
                                 <Box
-                                  direction={'row'}
+                                  direction="row"
                                   align="center"
                                   gap="xsmall"
                                 >
@@ -477,7 +472,7 @@ function App() {
                                   />
                                 </Box>
                                 <Box
-                                  direction={'row'}
+                                  direction="row"
                                   align="center"
                                   gap="xsmall"
                                 >
@@ -522,108 +517,113 @@ function App() {
                                   alignLabelRight
                                   size="small"
                                 />
+                                <Box pad={{ top: 'small' }} gap="small">
+                                  <NumberInput
+                                    size="small"
+                                    width="small"
+                                    value={resAmount.toString()}
+                                    decimals={0}
+                                    step={100}
+                                    min={0}
+                                    max={initials.resBal}
+                                    onChange={({ target: { value } }) =>
+                                      setResAmount(Number(value))
+                                    }
+                                  />
 
-                                <NumberInput
-                                  size="medium"
-                                  value={resAmount.toString()}
-                                  decimals={0}
-                                  step={100}
-                                  min={0}
-                                  max={initials.resBal}
-                                  onChange={({ target: { value } }) =>
-                                    setResAmount(Number(value))
-                                  }
-                                />
-
-                                <Button
-                                  onClick={() => cashIn(resAmount)}
-                                  color="complementary"
-                                  icon={<Money />}
-                                  label="Contribute Reserve"
-                                  size="xsmall"
-                                />
-                                <NumberDisplayInline
-                                  value={getInvPrice(
-                                    initials.reserve,
-                                    initials.supply,
-                                    initials.trr
-                                  )}
-                                  label="Rate: "
-                                  color="complementary"
-                                  align="start"
-                                />
-                                <NumberDisplayInline
-                                  value={getCashIn(resAmount)}
-                                  label="+CIC : "
-                                  color="complementary"
-                                  alignLabelRight
-                                  size="small"
-                                />
+                                  <Button
+                                    primary
+                                    onClick={() => cashIn(resAmount)}
+                                    color="complementary"
+                                    icon={<Money color="white" />}
+                                    label="Contribute Reserve"
+                                    size="xsmall"
+                                    style={{ color: 'white' }}
+                                  />
+                                  <NumberDisplayInline
+                                    value={getInvPrice(
+                                      initials.reserve,
+                                      initials.supply,
+                                      initials.trr
+                                    )}
+                                    label="Rate: "
+                                    color="complementary"
+                                    align="start"
+                                  />
+                                  <NumberDisplayInline
+                                    value={getCashIn(resAmount)}
+                                    label="+CIC : "
+                                    color="complementary"
+                                    alignLabelRight
+                                    size="small"
+                                  />
+                                </Box>
                               </Box>
-                            </Box>
+                            </Col>
+                            <Col lg={6}>
+                              <ResponsiveContainer height={400}>
+                                <ComposedChart
+                                  // width="100%"
+                                  height={400}
+                                  data={priceSetWithCicPrices}
+                                  margin={{
+                                    top: 20,
+                                    right: 30,
+                                    left: 0,
+                                    bottom: 0,
+                                  }}
+                                >
+                                  <CartesianGrid strokeDasharray="1 3" />
+                                  <YAxis>
+                                    <Label
+                                      value=""
+                                      offset={0}
+                                      position="insideTopLeft"
+                                    />
+                                  </YAxis>
 
-                            <ResponsiveContainer width="50%" height={400}>
-                              <ComposedChart
-                                width="100%"
-                                height={400}
-                                data={priceSetWithCicPrices}
-                                margin={{
-                                  top: 20,
-                                  right: 30,
-                                  left: 0,
-                                  bottom: 0,
-                                }}
-                              >
-                                <CartesianGrid strokeDasharray="1 3" />
-                                <YAxis>
-                                  <Label
-                                    value=""
-                                    offset={0}
-                                    position="insideTopLeft"
+                                  <XAxis dataKey="step">
+                                    <Label
+                                      value="conversions"
+                                      offset={0}
+                                      position="insideBottomRight"
+                                    />
+                                  </XAxis>
+                                  <Tooltip />
+                                  <Legend />
+                                  {/*<Bar
+                                      name="Reserve Ratio"
+                                      stackId="a"                     
+                                      fill="complementary"
+                                      dataKey="crr"
+                                      barSize={15}
+                                    />*/}
+                                  <Line
+                                    name="Exchange Rate"
+                                    type="natural"
+                                    dataKey="price"
+                                    stroke={theme.global.colors.brand}
+                                    strokeWidth={2}
                                   />
-                                </YAxis>
-
-                                <XAxis dataKey="step">
-                                  <Label
-                                    value="conversions"
-                                    offset={0}
-                                    position="insideBottomRight"
+                                  <Area
+                                    name="Reserve Ratio"
+                                    type="natural"
+                                    dataKey="crr"
+                                    stroke={theme.global.colors.complementary}
+                                    strokeWidth={2}
                                   />
-                                </XAxis>
-                                <Tooltip />
-                                <Legend />
-                                {/*<Bar
-                                name="Reserve Ratio"
-                                stackId="a"                     
-  			        fill={theme.global.colors.complementary}
-                                dataKey="crr"
-                                barSize={15}
-                              />*/}
-                                <Line
-                                  name="Excahnge Rate"
-                                  type="natural"
-                                  dataKey="price"
-                                  stroke={theme.global.colors.brand}
-                                  strokeWidth={2}
-                                />
-                                <Area
-                                  name="Reserve Ratio"
-                                  type="natural"
-                                  dataKey="crr"
-                                  stroke={theme.global.colors.complementary}
-                                  strokeWidth={2}
-                                />
-                                <Line
-                                  name="Target Reserve Ratio"
-                                  type="natural"
-                                  dataKey="trr"
-                                  stroke={theme.global.colors.black}
-                                  strokeWidth={4}
-                                  strokeDasharray="3 3"
-                                />
-                              </ComposedChart>
-                            </ResponsiveContainer>
-                          </Box>
+                                  <Line
+                                    name="Target Reserve Ratio"
+                                    type="natural"
+                                    dataKey="trr"
+                                    stroke={theme.global.colors.black}
+                                    strokeWidth={4}
+                                    strokeDasharray="3 3"
+                                  />
+                                </ComposedChart>
+                              </ResponsiveContainer>
+                            </Col>
+                          </Row>
                         </Box>
                       </Col>
                     )}

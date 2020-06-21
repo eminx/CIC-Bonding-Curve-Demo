@@ -15,9 +15,8 @@ const AppBar = (props) => (
   />
 );
 
-
 const InitialsUI = ({ initials, setInitial, large }) => {
-    const { reserve, supply, trr} = initials;
+  const { reserve, supply, trr } = initials;
 
   return (
     <Box size="large">
@@ -39,7 +38,9 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         name="reserve"
         label="Contribute Collateral to Reserve"
         value={reserve}
-      onChange={(value) => setInitial({ reserve: value, resBal: setInitResBal(value)})}
+        onChange={(value) =>
+          setInitial({ reserve: value, resBal: setInitResBal(value) })
+        }
         step={10}
         min={0}
         max={1000000}
@@ -49,7 +50,9 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         name="supply"
         label="Create a supply of CIC Tokens"
         value={supply}
-		onChange={(value) => setInitial({ supply: value, cicBal: setInitCICBal(value)  })}
+        onChange={(value) =>
+          setInitial({ supply: value, cicBal: setInitCICBal(value) })
+        }
         step={10}
         min={0}
         max={1000000}
@@ -174,11 +177,19 @@ const NumberDisplayInline = ({
           color={color}
           style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
         >
-          {label}<code>{value}</code>
+          {label}
+          <code>{value}</code>
         </Text>
       )}
     </Box>
   </Box>
 );
 
-export { AppBar, Field, InitialsUI, PlayMonitor, NumberDisplay, NumberDisplayInline };
+export {
+  AppBar,
+  Field,
+  InitialsUI,
+  PlayMonitor,
+  NumberDisplay,
+  NumberDisplayInline,
+};
