@@ -16,14 +16,16 @@ import {
   ComposedChart,
   Bar,
   Legend,
-//   Line,
+  Line,
   CartesianGrid,
   XAxis,
   YAxis,
   Label,
   Tooltip,
+  Area,
+  //AreaChart,
 } from 'recharts';
-import { Atm, Money, Cafeteria, Bike, Basket, Grow } from 'grommet-icons';
+import { Atm, Money, Cafeteria, Restroom, Tools, Bike, Basket, Book, PhoneVertical, Grow } from 'grommet-icons';
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
@@ -32,7 +34,8 @@ import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
   getPrice,
-  getInvPrice, 
+  getInvPrice,
+  getCRR,
   defaultInitials,
   defaultCICAmount,
   defaultResAmount,
@@ -160,7 +163,9 @@ function App() {
     setPriceSet([
       ...priceSet,
       {
-        price: getPrice(newReserve, newSupply, trr),
+	trr: trr,
+	crr: getCRR(newReserve, newSupply),
+	price: getPrice(newReserve, newSupply, trr),
         step: priceSet.length,
       },
     ]);
@@ -198,7 +203,9 @@ function App() {
       setPriceSet([
         ...priceSet,
         {
-          price: getPrice(newReserve, newSupply, initials.trr),
+       	  trr: trr,
+	  crr: getCRR(newReserve, newSupply),
+	  price: getPrice(newReserve, newSupply, initials.trr),
           step: priceSet.length,
         },
       ]);
@@ -206,7 +213,7 @@ function App() {
   };
 
   const changePlayMode = () => {
-    const { reserve, supply, trr } = initials;
+      const { reserve, supply, trr} = initials;
     if (playMode) {
       setPlayMode(false);
       setInitials(defaultInitials);
@@ -216,7 +223,9 @@ function App() {
     } else {
       setPriceSet([
         {
-          price: getPrice(reserve, supply, trr),
+	  trr: trr,
+	  crr: getCRR(reserve, supply),
+	  price: getPrice(reserve, supply, trr),
           step: 0,
         },
       ]);
@@ -225,16 +234,18 @@ function App() {
   };
 
   const resetAll = () => {
-    const { reserve, supply, trr } = initials;
+      const { reserve, supply, trr , cicBal, resBal} = initials;
     if (playMode) {
-      setInitials(defaultInitials);
+      setInitials(initials);
       setPriceSet([defaultPriceSetItem]);
       setCICAmount(defaultCICAmount);
       setResAmount(defaultResAmount);
     } else {
       setPriceSet([
         {
-          price: getPrice(reserve, supply, trr),
+	  trr: trr,
+	  crr: getCRR(reserve, supply),
+	  price: getPrice(reserve, supply, trr),
           step: 0,
         },
       ]);
@@ -273,10 +284,10 @@ function App() {
                     <Col lg={6}>
                       <Box pad="small">
                         <Text size="large" weight="bold" textAlign="center">
-                          CIC Demo & Play
+                  Community Inclusion Currency (CIC)
                         </Text>
                         <Text size="small">
-                          CIC = Community Inclusion Currency
+                          Demo & Play
                         </Text>
                       </Box>
                     </Col>
@@ -304,9 +315,9 @@ function App() {
                         )}
 
                         <Box gap="medium" justify="between">
-                          {playMode && (
+                          {/*playMode && (
                             <Button label="Reset" onClick={() => resetAll()} />
-                          )}
+                          )*/}
                           <Button
                             primary={!playMode}
                             label={playMode ? 'Restart' : 'Start'}
@@ -334,26 +345,62 @@ function App() {
                               align="center"
                               gap="small"
                             >
-                              <Box width="small" align="start" pad="xsmall">
+                            <Box width="small" align="start" pad="xsmall">
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
 
+                              <Button
+                                onClick={() => buyCIC(50)}
+                                color="brand"
+                                icon={<Basket />}
+                                label="Buy 50"
+                                size="xsmall"
+                              />
                               <Button
                                 onClick={() => buyCIC(250)}
                                 color="brand"
-                                icon={<Basket />}
-                                label="Buy with 250 CIC"
-                                size="small"
+                                icon={<Tools />}
+                                label="Buy 250"
+                                size="xsmall"
                               />
-                              <Button
+			    </Box>
+
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                            <Button
                                 onClick={() => sellCIC(300)}
                                 color="brand"
                                 icon={<Cafeteria />}
-                                label="Sell for 300 CIC"
-                                size="small"
+                                label="Sell 300"
+                                size="xsmall"
                             />
+                            <Button
+                                onClick={() => sellCIC(500)}
+                                color="brand"
+                                icon={<Grow />}
+                                label="Sell 500"
+                                size="xsmall"
+                            />
+			    </Box>
+			         <NumberDisplayInline
+                                  value={initials.cicBal}
+                                  label="My CIC: "
+                                  color="brand"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
 
                                 <NumberDisplayInline
                                   value={initials.cicPurchases}
-                                  label="CIC Purchases: "
+                                  label="Bought: "
                                   color="brand"
                                   align="end"
                                   alignLabelRight
@@ -361,95 +408,14 @@ function App() {
                                 />
                                 <NumberDisplayInline
                                   value={initials.cicSales}
-                                  label="CIC Sales: "
+                                  label="Sold: "
                                   color="brand"
                                   align="end"
                                   alignLabelRight
                                   size="large"
                                 />
 
-
-
-                        </Box>
-			    </Box>
-			    
-
-			         <Box
-                              direction={large ? 'row' : 'column'}
-                              align="center"
-                              gap="small"
-                            >
-
-                              <Box width="small" align="start" pad="xsmall">
-                              <Button
-                                onClick={() => buyReserve(100)}
-                                color="complementary"
-                                icon={<Bike />}
-                                label="Buy with 100 reserve"
-                                size="small"
-                              />
-                              <Button
-                                onClick={() => sellReserve(300)}
-                                color="complementary"
-                                icon={<Cafeteria />}
-                                label="Sell for 300 reserve"
-                                size="small"
-                              />
-
-                                <NumberDisplayInline
-                                  value={initials.resPurchases}
-                                  label="Reserve Purchases: "
-                                  color="complementary"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                                <NumberDisplayInline
-                                  value={initials.resSales}
-                                  label="Reserve Sales: "
-                                  color="complementary"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-
-
-                        </Box>
-
 			
-			</Box>
-
-
-                            <Box
-                              direction={large ? 'row' : 'column'}
-                              gap="medium"
-                            >
-                              <Box size="small">
-                                <NumberDisplay
-                                  value={initials.cicBal}
-                                  label="My CIC Balance"
-                                  color="dark-1"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                                <NumberDisplay
-                                  value={initials.resBal}
-                                  label="My Reserve Balance"
-                                  color="dark-1"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
-                                />
-                              </Box>
-                            </Box>
-			    
-                            <Box
-                              direction={large ? 'row' : 'column'}
-                              align="center"
-                              gap="small"
-                            >
-                              <Box width="small" align="start" pad="xsmall">
                                 <NumberInput
                                   size="medium"
                                   value={cicAmount.toString()}
@@ -470,7 +436,7 @@ function App() {
                               />
 			       <NumberDisplayInline
                                value={getPrice(initials.reserve, initials.supply, initials.trr)}
-                               label="CIC -> Reserve Rate: "
+                               label="Rate: "
                                color="brand"
                                align="start"
                                />
@@ -482,9 +448,12 @@ function App() {
                                   size="small"
                             />
 
-                        </Box>
 
-                              </Box>
+
+
+                        </Box>
+			    </Box>
+			    
 
 			    <Box
                               direction={large ? 'row' : 'column'}
@@ -492,7 +461,78 @@ function App() {
                               gap="small"
                             >
 
-                              <Box width="small" align="start" pad="xsmall">
+                            <Box width="small" align="start" pad="xsmall">
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                              <Button
+                                onClick={() => buyReserve(100)}
+                                color="complementary"
+                                icon={<Bike />}
+                                label="Buy 100"
+                                size="xsmall"
+                              />
+                              <Button
+                                onClick={() => buyReserve(100)}
+                                color="complementary"
+                                icon={<Book />}
+                                label="Buy 100"
+                                size="xsmall"
+                              />
+			    </Box>
+			    <Box
+                              direction={'row'}
+                              align="center"
+                              gap="xsmall"
+                            >
+
+                            <Button
+                                onClick={() => sellReserve(300)}
+                                color="complementary"
+                                icon={<Cafeteria />}
+                                label="Sell 300"
+                                size="xsmall"
+                            />
+			    <Button
+                                onClick={() => sellReserve(500)}
+                                color="complementary"
+                                icon={<Grow />}
+                                label="Sell 500"
+                                size="xsmall"
+                            />
+			    </Box>
+
+                                <NumberDisplayInline
+                                  value={initials.resBal}
+                                  label="My Reserve: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
+
+                                <NumberDisplayInline
+                                  value={initials.resPurchases}
+                                  label="Bought: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                            />
+                                <NumberDisplayInline
+                                  value={initials.resSales}
+                                  label="Sold: "
+                                  color="complementary"
+                                  align="end"
+                                  alignLabelRight
+                                  size="small"
+                                />
+
+			
+
                                 <NumberInput
                                   size="medium"
                                   value={resAmount.toString()}
@@ -512,28 +552,27 @@ function App() {
                                 label="Contribute Reserve"
                                 size="xsmall"
                             />
-      <NumberDisplayInline
-        value={getInvPrice(initials.reserve, initials.supply, initials.trr)}
-        label="Reserve -> CIC Rate: "
-        color="complementary"
-        align="start"
-      />
-			       <NumberDisplayInline
-                                  value={getCashIn(resAmount)}
-                                  label="+CIC : "
-                                  color="complementary"
-                                  alignLabelRight
-                                  size="small"
-                                />
+			    <NumberDisplayInline
+			value={getInvPrice(initials.reserve, initials.supply, initials.trr)}
+			label="Rate: "
+			color="complementary"
+			align="start"
+			    />
+			    <NumberDisplayInline
+                        value={getCashIn(resAmount)}
+                        label="+CIC : "
+                        color="complementary"
+                        alignLabelRight
+                        size="small"
+                            />
 
-                            </Box>
+			
+                        </Box>
 
 			
 			</Box>
 
-                        </Box>
-
-                          <ResponsiveContainer width="100%" height={400}>
+                          <ResponsiveContainer width="50%" height={400}>
                             <ComposedChart
                               width="100%"
                               height={400}
@@ -545,7 +584,15 @@ function App() {
                                 bottom: 0,
                               }}
                             >
-                              <CartesianGrid strokeDasharray="1 3" />
+                            <CartesianGrid strokeDasharray="1 3" />
+			    <YAxis>
+                              <Label
+                                value=""
+                                offset={0}
+                                position="insideTopLeft"
+                              />
+                            </YAxis>
+
                               <XAxis dataKey="step">
                                 <Label
                                   value="conversions"
@@ -553,38 +600,42 @@ function App() {
                                   position="insideBottomRight"
                                 />
                               </XAxis>
-                              <YAxis>
-                                <Label
-                                  value="price"
-                                  offset={0}
-                                  position="insideTopLeft"
-                                />
-                              </YAxis>
                               <Tooltip />
                               <Legend />
-                              <Bar
-                                name="CIC -> Reserve Price"
-                                stackId="a"
-                                fill={theme.global.colors.brand}
-                                dataKey="price"
+                            {/*<Bar
+                                name="Reserve Ratio"
+                                stackId="a"                     
+  			        fill={theme.global.colors.complementary}
+                                dataKey="crr"
                                 barSize={15}
-                              />
-                        {/*<Line
-                                name="Reserve -> CIC"
+                              />*/}
+                            <Line
+                                name="Excahnge Rate"
                                 type="natural"
-                                dataKey="cicPrice"
+                                dataKey="price"
                                 stroke={theme.global.colors.brand}
                                 strokeWidth={2}
-                              />
-                              <Line
-                                name="CIC -> Reserve"
+                            />
+			     <Area
+                                name="Reserve Ratio"
                                 type="natural"
-                                dataKey="price"
+                                dataKey="crr"
                                 stroke={theme.global.colors.complementary}
                                 strokeWidth={2}
-                              />*/}
+                            />
+			    <Line
+                                name="Target Reserve Ratio"
+                                type="natural"
+                                dataKey="trr"
+                                stroke={theme.global.colors.black}
+                                strokeWidth={4}
+			        strokeDasharray="3 3"
+                              />
+
                             </ComposedChart>
-                          </ResponsiveContainer>
+                            </ResponsiveContainer>
+
+			                            </Box>
                         </Box>
                       </Col>
                     )}
