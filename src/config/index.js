@@ -1,13 +1,10 @@
 const setInitCICBal = (total) => {
     const newBal = total*0.25
-    const defaultCICAmount = total*.1;
     return newBal;
 };
 
 const setInitResBal = (total) => {
     const newBal = total*0.1
-    const defaultResAmount =  total*.1;
-
     return newBal;
 };
 
