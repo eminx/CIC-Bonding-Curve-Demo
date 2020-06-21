@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, FormField, RangeInput } from 'grommet';
 import { NumberInput } from 'grommet-controls';
-import { setInitCICBal, setInitResBal, getPrice, getInvPrice, getCRR } from './config';
+import { setInitCICBal, setInitResBal, getPrice, getCRR } from './config';
 
 const AppBar = (props) => (
   <Box
@@ -17,7 +17,7 @@ const AppBar = (props) => (
 
 
 const InitialsUI = ({ initials, setInitial, large }) => {
-    const { reserve, supply, trr, cicBal, resBal} = initials;
+    const { reserve, supply, trr} = initials;
 
   return (
     <Box size="large">
