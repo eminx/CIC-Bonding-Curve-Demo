@@ -6,7 +6,7 @@ import {
   Box,
   Image,
   Grommet,
-  //Menu,
+  Main,
   Text,
   Footer,
 } from 'grommet';
