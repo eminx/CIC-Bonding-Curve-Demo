@@ -6,7 +6,7 @@ import {
   Box,
   Image,
   Grommet,
-  Main,
+  //Menu,
   Text,
   Footer,
 } from 'grommet';
@@ -286,6 +286,7 @@ function App() {
                         <Text size="large" weight="bold" textAlign="center">
                           Community Inclusion Currency (CIC)
                         </Text>
+                        <Text size="small">Demo & Play</Text>
                         <Text size="small">Demo & Play</Text>
                       </Box>
                     </Col>
