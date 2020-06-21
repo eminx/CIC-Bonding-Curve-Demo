@@ -396,7 +396,10 @@ function App() {
                                   align="start"
                                   size="small"
                                 />
-                                <Box pad={{ top: 'medium' }} gap="small">
+                                <Box
+                                  pad={{ top: 'medium', bottom: 'large' }}
+                                  gap="small"
+                                >
                                   <NumberInput
                                     size="small"
                                     width="small"
@@ -508,7 +511,10 @@ function App() {
                                   align="start"
                                   size="small"
                                 />
-                                <Box pad={{ top: 'medium' }} gap="small">
+                                <Box
+                                  pad={{ top: 'medium', bottom: 'large' }}
+                                  gap="small"
+                                >
                                   <NumberInput
                                     size="small"
                                     width="small"
