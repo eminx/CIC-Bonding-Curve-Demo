@@ -38,12 +38,7 @@ import {
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import {
-  AppBar,
-  InitialsUI,
-  PlayMonitor,
-  NumberDisplayInline,
-} from './components';
+import { AppBar, InitialsUI, PlayMonitor, NumberDisplay } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
@@ -310,10 +305,11 @@ function App() {
                           <InitialsUI
                             initials={initials}
                             setInitial={setInitial}
+                            large={large}
                           />
                         )}
 
-                        <Box gap="medium" justify="between">
+                        <Box pad={{ vertical: 'medium' }} justify="between">
                           {/*playMode && (
                             <Button label="Reset" onClick={() => resetAll()} />
                           )*/}
@@ -339,21 +335,20 @@ function App() {
                                   direction="row"
                                   align="center"
                                   gap="xsmall"
-                                  width="100%"
                                 >
                                   <Button
                                     onClick={() => buyCIC(50)}
                                     color="brand"
                                     icon={<Basket />}
                                     label="Buy 50"
-                                    size="small"
+                                    size="xsmall"
                                   />
                                   <Button
                                     onClick={() => buyCIC(250)}
                                     color="brand"
                                     icon={<Tools />}
                                     label="Buy 250"
-                                    size="small"
+                                    size="xsmall"
                                   />
                                 </Box>
 
@@ -377,32 +372,32 @@ function App() {
                                     size="xsmall"
                                   />
                                 </Box>
-                                <NumberDisplayInline
+                                <NumberDisplay
+                                  inline
                                   value={initials.cicBal}
                                   label="My CIC: "
                                   color="brand"
-                                  align="end"
-                                  alignLabelRight
+                                  align="start"
                                   size="small"
                                 />
 
-                                <NumberDisplayInline
+                                <NumberDisplay
+                                  inline
                                   value={initials.cicPurchases}
                                   label="Bought: "
                                   color="brand"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
+                                  align="start"
+                                  size="small"
                                 />
-                                <NumberDisplayInline
+                                <NumberDisplay
+                                  inline
                                   value={initials.cicSales}
                                   label="Sold: "
                                   color="brand"
-                                  align="end"
-                                  alignLabelRight
-                                  size="large"
+                                  align="start"
+                                  size="small"
                                 />
-                                <Box pad={{ top: 'small' }} gap="small">
+                                <Box pad={{ top: 'medium' }} gap="small">
                                   <NumberInput
                                     size="small"
                                     width="small"
@@ -423,7 +418,8 @@ function App() {
                                     label="Redeem CIC"
                                     size="xsmall"
                                   />
-                                  <NumberDisplayInline
+                                  <NumberDisplay
+                                    inline
                                     value={getPrice(
                                       initials.reserve,
                                       initials.supply,
@@ -431,13 +427,13 @@ function App() {
                                     )}
                                     label="Rate: "
                                     color="brand"
-                                    align="start"
+                                    size="small"
                                   />
-                                  <NumberDisplayInline
+                                  <NumberDisplay
+                                    inline
                                     value={getCashOut(cicAmount)}
                                     label="+Reserve: "
                                     color="brand"
-                                    alignLabelRight
                                     size="small"
                                   />
                                 </Box>
@@ -445,12 +441,7 @@ function App() {
                             </Col>
 
                             <Col lg={3}>
-                              <Box
-                                align="start"
-                                pad="xsmall"
-                                gap="small"
-                                width="100%"
-                              >
+                              <Box align="start" pad="xsmall" gap="small">
                                 <Box
                                   direction="row"
                                   align="center"
@@ -492,32 +483,33 @@ function App() {
                                   />
                                 </Box>
 
-                                <NumberDisplayInline
+                                <NumberDisplay
+                                  inline
                                   value={initials.resBal}
                                   label="My Reserve: "
+                                  align="start"
                                   color="complementary"
-                                  align="end"
-                                  alignLabelRight
                                   size="small"
                                 />
 
-                                <NumberDisplayInline
+                                <NumberDisplay
+                                  inline
                                   value={initials.resPurchases}
                                   label="Bought: "
                                   color="complementary"
-                                  align="end"
-                                  alignLabelRight
+                                  align="smart"
                                   size="small"
                                 />
-                                <NumberDisplayInline
+
+                                <NumberDisplay
+                                  inline
                                   value={initials.resSales}
                                   label="Sold: "
                                   color="complementary"
-                                  align="end"
-                                  alignLabelRight
+                                  align="start"
                                   size="small"
                                 />
-                                <Box pad={{ top: 'small' }} gap="small">
+                                <Box pad={{ top: 'medium' }} gap="small">
                                   <NumberInput
                                     size="small"
                                     width="small"
@@ -540,7 +532,8 @@ function App() {
                                     size="xsmall"
                                     style={{ color: 'white' }}
                                   />
-                                  <NumberDisplayInline
+                                  <NumberDisplay
+                                    inline
                                     value={getInvPrice(
                                       initials.reserve,
                                       initials.supply,
@@ -548,14 +541,15 @@ function App() {
                                     )}
                                     label="Rate: "
                                     color="complementary"
+                                    size="small"
                                     align="start"
                                   />
-                                  <NumberDisplayInline
+                                  <NumberDisplay
+                                    inline
                                     value={getCashIn(resAmount)}
                                     label="+CIC : "
-                                    color="complementary"
-                                    alignLabelRight
                                     size="small"
+                                    color="complementary"
                                   />
                                 </Box>
                               </Box>

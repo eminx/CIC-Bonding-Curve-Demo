@@ -20,7 +20,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
 
   return (
     <Box size="large">
-      <Box direction="row" justify="center" pa>
+      <Box direction="row" justify="center" gap="medium" pad="small">
         <NumberDisplay
           value={getCRR(reserve, supply)}
           label="Reserve Ratio"
@@ -34,7 +34,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
           align="start"
         />
       </Box>
-      <Field
+      <InitialField
         name="reserve"
         label="Contribute Collateral to Reserve"
         value={reserve}
@@ -44,9 +44,9 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         step={10}
         min={0}
         max={1000000}
-        // thousandsSeparatorSymbol=" "
+        large={large}
       />
-      <Field
+      <InitialField
         name="supply"
         label="Create a supply of CIC Tokens"
         value={supply}
@@ -56,10 +56,10 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         step={10}
         min={0}
         max={1000000}
-        // thousandsSeparatorSymbol=" "
+        large={large}
       />
 
-      <Field
+      <InitialField
         name="trr"
         label="Target Reserve Ratio"
         value={trr}
@@ -68,6 +68,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
         min={0.01}
         max={1}
         decimals={2}
+        large={large}
       />
     </Box>
   );
@@ -76,7 +77,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
 const PlayMonitor = ({ initials }) => {
   const { reserve, supply, trr } = initials;
   return (
-    <Box size="small">
+    <Box size="small" gap="medium" pad="medium">
       <NumberDisplay
         value={reserve}
         label="Total Reserve"
@@ -108,11 +109,18 @@ const PlayMonitor = ({ initials }) => {
   );
 };
 
-const Field = ({ name, value, label, onChange, ...otherProps }) => {
+const InitialField = ({
+  name,
+  value,
+  label,
+  onChange,
+  large,
+  ...otherProps
+}) => {
   return (
     <FormField name={name} label={label} margin={{ bottom: 'medium' }}>
       <Box direction="row" align="center">
-        <Box width="100%" margin={{ right: 'small' }}>
+        <Box basis="100%" margin={{ right: 'small' }}>
           <NumberInput
             size="large"
             value={value.toString()}
@@ -121,13 +129,15 @@ const Field = ({ name, value, label, onChange, ...otherProps }) => {
             {...otherProps}
           />
         </Box>
-        <Box width="100%">
-          <RangeInput
-            value={value}
-            onChange={({ target: { value } }) => onChange(Number(value))}
-            {...otherProps}
-          />
-        </Box>
+        {large && (
+          <Box basis="100%">
+            <RangeInput
+              value={value}
+              onChange={({ target: { value } }) => onChange(Number(value))}
+              {...otherProps}
+            />
+          </Box>
+        )}
       </Box>
     </FormField>
   );
@@ -135,61 +145,31 @@ const Field = ({ name, value, label, onChange, ...otherProps }) => {
 
 const NumberDisplay = ({
   align = 'end',
-  color,
+  color = 'dark-1',
   label,
   size = 'xxlarge',
   value,
   alignLabelRight,
+  inline,
   ...otherProps
 }) => (
-  <Box {...otherProps} pad="small">
-    <Box align={align}>
-      {label && (
-        <Text
-          size="small"
-          color={color}
-          style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
-        >
-          {label}
-        </Text>
-      )}
-      <Text size={size} color={color}>
-        <code>{value}</code>
+  <Box direction={inline ? 'row' : 'column'} {...otherProps}>
+    {label && (
+      <Text
+        size="small"
+        color={color}
+        style={{
+          textAlign: alignLabelRight ? 'right' : 'left',
+          paddingRight: 4,
+        }}
+      >
+        {label}{' '}
       </Text>
-    </Box>
+    )}
+    <Text size={size} color="dark-2">
+      <code>{value}</code>
+    </Text>
   </Box>
 );
 
-const NumberDisplayInline = ({
-  align = 'end',
-  color,
-  label,
-  size = 'small',
-  value,
-  alignLabelRight,
-  ...otherProps
-}) => (
-  <Box {...otherProps} pad="xsmall">
-    <Box align={align}>
-      {label && (
-        <Text
-          size="small"
-          color={color}
-          style={{ textAlign: alignLabelRight ? 'right' : 'left' }}
-        >
-          {label}
-          <code>{value}</code>
-        </Text>
-      )}
-    </Box>
-  </Box>
-);
-
-export {
-  AppBar,
-  Field,
-  InitialsUI,
-  PlayMonitor,
-  NumberDisplay,
-  NumberDisplayInline,
-};
+export { AppBar, InitialField, InitialsUI, PlayMonitor, NumberDisplay };
