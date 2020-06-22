@@ -38,7 +38,7 @@ import {
 import { Container, Row, Col, ScreenClassRender } from 'react-grid-system';
 
 import theme from './config/theme';
-import { AppBar, InitialsUI, PlayMonitor, NumberDisplay } from './components';
+import { AppBar, InitialsUI, PlayMonitor, NumberDisplay, TextDisplay } from './components';
 import {
   getNewSupplyCashIn,
   getNewReserveCashOut,
@@ -330,11 +330,19 @@ function App() {
                           <Row>
                             <Col lg={3}>
                               <Box align="start" pad="xsmall" gap="small">
-                                <Box
+			          <TextDisplay
+                                    inline
+                                    label="Use CIC"
+                                    color="brand"
+                                    size="small"
+                                  />
+
+                            <Box
                                   direction="row"
                                   align="center"
                                   gap="xsmall"
-                                >
+                            >
+
                                   <Button
                                     onClick={() => buyCIC(50)}
                                     color="brand"
@@ -434,8 +442,8 @@ function App() {
                                   <NumberDisplay
                                     inline
                                     value={getCashOut(cicAmount)}
-                                    label="+Reserve: "
-                                    color="brand"
+                                    label="+National Currency: "
+                                    color="complementary"
                                     size="small"
                                   />
                                 </Box>
@@ -444,11 +452,19 @@ function App() {
 
                             <Col lg={3}>
                               <Box align="start" pad="xsmall" gap="small">
-                                <Box
+			    <TextDisplay
+                                    inline
+                                    label="Use National Currency"
+                                    color="complementary"
+                                    size="small"
+                                  />
+
+                            <Box
                                   direction="row"
                                   align="center"
                                   gap="xsmall"
-                                >
+                            >
+
                                   <Button
                                     onClick={() => buyReserve(100)}
                                     color="complementary"
@@ -488,7 +504,7 @@ function App() {
                                 <NumberDisplay
                                   inline
                                   value={initials.resBal}
-                                  label="My Reserve: "
+                                  label="My National Currency: "
                                   align="start"
                                   color="complementary"
                                   size="small"
@@ -554,7 +570,7 @@ function App() {
                                     value={getCashIn(resAmount)}
                                     label="+CIC : "
                                     size="small"
-                                    color="complementary"
+                                    color="brand"
                                   />
                                 </Box>
                               </Box>
