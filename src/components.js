@@ -75,7 +75,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
 };
 
 const PlayMonitor = ({ initials }) => {
-  const { reserve, supply, trr } = initials;
+  const { reserve, supply} = initials;
   return (
     <Box size="small" gap="medium" pad="medium">
       <NumberDisplay
