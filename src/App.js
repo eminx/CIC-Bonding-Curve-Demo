@@ -481,17 +481,18 @@ function App() {
                                   <Button
                                     onClick={() => buyReserve(100)}
                                     color="complementary"
-                                    icon={<Bike />}
-                                    label="Buy 100"
-                                    size="xsmall"
-                                  />
-                                  <Button
-                                    onClick={() => buyReserve(100)}
-                                    color="complementary"
                                     icon={<Book />}
                                     label="Buy 100"
                                     size="xsmall"
+                            />
+			        <Button
+                                    onClick={() => buyReserve(500)}
+                                    color="complementary"
+                                    icon={<Bike />}
+                                    label="Buy 500"
+                                    size="xsmall"
                                   />
+
                                 </Box>
                                 <Box
                                   direction="row"
