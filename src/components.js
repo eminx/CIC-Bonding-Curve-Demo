@@ -34,7 +34,7 @@ const InitialsUI = ({ initials, setInitial, large }) => {
           align="start"
         />
       </Box>
-      <InitialField
+       <InitialField
         name="reserve"
         label="Contribute National Currency Collateral"
         value={reserve}

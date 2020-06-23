@@ -1,3 +1,11 @@
+const getPercent = (value, total) => {
+  const ratio = total > 0 ? value / total : 0;
+
+  return toPercent(ratio, 2);
+};
+
+const toPercent = (decimal, fixed = 0) => `${(decimal * 100).toFixed(fixed)}%`;
+
 const setInitCICBal = (total) => {
     const newBal = total*0.25
     return newBal;
@@ -52,7 +60,7 @@ const getInvPrice = (reserve, supply, trr) => {
 const getCRR = (reserve, supply) => {
     if (supply >0) {
 	const crr = reserve / supply;
-        return crr.toFixed(2);
+        return crr; //.toFixed(2);
     }
     else {
 	return 0;
@@ -122,4 +130,6 @@ export {
   defaultPriceSetItem,
     setInitCICBal,
     setInitResBal,
+    getPercent,
+    toPercent,
 };
