@@ -71,7 +71,7 @@ function App() {
         reserve: initials.reserve,
         supply: initials.supply,
         trr: initials.trr,
-        crr: initials.crr,
+          crr: initials.crr,
         cicBal: newcicBal,
         resBal: initials.resBal,
         cicPurchases: newcicPurchases,
@@ -149,8 +149,11 @@ function App() {
   };
 
   const cashIn = (resAmount) => {
-    const { reserve, supply, trr, cicBal, resBal } = initials;
-    if (resAmount <= resBal) {
+      const { reserve, supply, trr, cicBal, resBal } = initials;
+      if (resAmount >= resBal ) {
+	  resAmount = resBal;
+       }
+    if (resAmount <= resBal && resAmount>0) {
       const newReserve = reserve + resAmount;
       const addedSupply = getNewSupplyCashIn(reserve, supply, trr, resAmount);
       const newSupply = supply + addedSupply;
@@ -175,8 +178,8 @@ function App() {
 	    cic: newSupply,
 	    res: newReserve,
             trr: trr,
-            crr: getCRR(newReserve, newSupply),
-          price: getPrice(newReserve, newSupply, trr),
+            crr: getCRR(newReserve, newSupply).toFixed(2),
+          price: getPrice(newReserve, newSupply, trr).toFixed(2),
           step: priceSet.length,
         },
       ]);
@@ -185,13 +188,20 @@ function App() {
 
   const getCashOut = (cicAmount) => {
     const { reserve, supply, trr } = initials;
-    const addedReserve = getNewReserveCashOut(reserve, supply, trr, cicAmount);
-    return -1 * addedReserve;
+    const addedReserve = -1*getNewReserveCashOut(reserve, supply, trr, cicAmount);
+      if (addedReserve <0){
+	  return 0;
+      }
+    return addedReserve;
   };
 
   const cashOut = (cicAmount) => {
-    const { reserve, supply, trr, cicBal, resBal } = initials;
-    if (cicAmount <= cicBal) {
+      const { reserve, supply, trr, cicBal, resBal } = initials;
+   
+      if (cicAmount <= cicBal) {
+	  if (cicAmount >= supply){
+	      cicAmount = supply * 0.9999;
+	  }
       const addedReserve = getNewReserveCashOut(
         reserve,
         supply,
@@ -222,11 +232,11 @@ function App() {
             cic: newSupply,
 	    res: newReserve,
             trr: trr,
-            crr: getCRR(newReserve, newSupply),
+            crr: getCRR(newReserve, newSupply).toFixed(2),
 
             //trr: trr,
           //crr: getCRR(newReserve, newSupply),
-          price: getPrice(newReserve, newSupply, initials.trr),
+          price: getPrice(newReserve, newSupply, initials.trr).toFixed(2),
           step: priceSet.length,
         },
       ]);
@@ -247,11 +257,11 @@ function App() {
 	  cic: supply,
 	    res: reserve,
             trr: trr,
-            crr: getCRR(reserve, supply),
+            crr: getCRR(reserve, supply).toFixed(2),
 	
           //trr: trr,
           //crr: getCRR(reserve, supply),
-          price: getPrice(reserve, supply, trr),
+          price: getPrice(reserve, supply, trr).toFixed(2),
           step: 0,
         },
       ]);
@@ -427,7 +437,7 @@ function App() {
                                     decimals={0}
                                     step={100}
                                     min={0}
-                                    max={initials.cicBal}
+                        max={Math.min(initials.cicBal,initials.supply*0.999)}
                                     onChange={({ target: { value } }) =>
                                       setCICAmount(Number(value))
                                     }

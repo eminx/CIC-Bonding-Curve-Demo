@@ -169,7 +169,7 @@ const NumberDisplay = ({
       </Text>
     )}
     <Text size={size} color="dark-2">
-      <code>{value}</code>
+      <code>{value.toFixed(2)}</code>
     </Text>
   </Box>
 );

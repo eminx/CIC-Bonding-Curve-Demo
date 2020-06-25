@@ -19,7 +19,7 @@ const setInitResBal = (total) => {
 const getNewSupplyCashIn = (reserve, supply, trr, amount) => {
     if (reserve >0) {
     const newSupply = supply * (Math.pow(1 + amount / reserve, trr) - 1);
-  return Math.round(newSupply);
+	return newSupply;//Math.round(newSupply);
 	}
     else{
 	return 0;
@@ -30,7 +30,7 @@ const getNewSupplyCashIn = (reserve, supply, trr, amount) => {
 const getNewReserveCashOut = (reserve, supply, trr, amount) => {
         if (supply >0) {
     const newReserve = reserve * (Math.pow(1 + (-1 * amount) / supply, 1 / trr) - 1);
-	    return Math.round(newReserve);
+	    return newReserve;//Math.round(newReserve);
 	}
     else{
 	return 0;
@@ -40,7 +40,7 @@ const getNewReserveCashOut = (reserve, supply, trr, amount) => {
 const getPrice = (reserve, supply, trr) => {
     if (supply >0) {
   const price = reserve / (supply * trr);
-	return price.toFixed(2);
+	return price;//.toFixed(2);
     }
     else {
 	return 0;
@@ -50,7 +50,7 @@ const getPrice = (reserve, supply, trr) => {
 const getInvPrice = (reserve, supply, trr) => {
   if (reserve >0) {
   const price =  (supply * trr)/ reserve;
-      return price.toFixed(2);
+      return price;//.toFixed(2);
   }
     else{
 	return 0;
